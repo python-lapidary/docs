@@ -2,33 +2,26 @@ site_name: Lapidary
 site_description: Build Web API clients with python annotations
 copyright: © 2024 Rafał Krupiński
 repo_url: https://github.com/python-lapidary/lapidary
-repo_name: python-lapidary/lapidary
-edit_uri: ''
-
-docs_dir: ../docs
-site_dir: ../site
-site_url: https://lapidary.dev/
 
 nav:
-- Lapidary: index.md
-- Usage:
-  - usage/client.md
-  - usage/operation.md
-  - usage/auth.md
-
+- index.md
+- Lapidary runtime: '!include docs/lapidary/config/mkdocs.yml'
+- Lapidary render: '!include docs/lapidary-render/config/mkdocs.yml'
 plugins:
+- monorepo
 - mkdocstrings:
     handlers:
       python:
         paths:
-        - ../src
+        - docs/lapidary/src
+        - docs/lapidary-render/src
         options:
           docstring_style: sphinx
 
 theme:
   name: material
   logo: logo.svg
-  favicon: logo.png
+  favicon: logo.svg
   language: en
   features:
   - navigation.instant

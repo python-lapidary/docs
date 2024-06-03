@@ -1,33 +1,61 @@
 name: Deploy MkDocs to GitHub Pages
 
 on:
+  schedule:
+  - cron: 0 3 * * *
   push:
     branches:
-      - develop  # Set this to your default branch
+    - develop
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout docs
       uses: actions/checkout@v4
+
+    - name: Checkout lapidary
+      uses: actions/checkout@v4
+      with:
+        repository: python-lapidary/lapidary
+        ref: develop
+        path: docs/lapidary
+
+    - name: Checkout lapidary-render
+      uses: actions/checkout@v4
+      with:
+        repository: python-lapidary/lapidary-render
+        ref: develop
+        path: docs/lapidary-render
 
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x'  # Set this to the Python version you're using
+        python-version: '3.x'
+
+    - name: Cache Poetry dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/pypoetry
+          ~/.cache/pip
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-
 
     - name: Install dependencies
       run: |
-        pip install mkdocs-material 'mkdocstrings[python]'
+        pip install poetry
+        poetry install --no-root
 
     - name: Build site
-      run: mkdocs build -f config/mkdocs.yml
+      run: poetry run mkdocs build
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./site  # Set this to your 'site_dir' if you have a custom build directory
+        publish_dir: ./site
         cname: lapidary.dev
