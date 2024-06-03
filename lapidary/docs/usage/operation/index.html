@@ -1,0 +1,795 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Build Web API clients with python annotations">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../../logo.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
+    
+    
+      
+        <title>Operation - Lapidary</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.6543a935.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  <script data-goatcounter="https://lapidary.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#parameters" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Lapidary" class="md-header__button md-logo" aria-label="Lapidary" data-md-component="logo">
+      
+  <img src="../../../../logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lapidary
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Operation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/python-lapidary/docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Lapidary" class="md-nav__button md-logo" aria-label="Lapidary" data-md-component="logo">
+      
+  <img src="../../../../logo.svg" alt="logo">
+
+    </a>
+    Lapidary
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/python-lapidary/docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Lapidary
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Lapidary
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lapidary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/client.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    None
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/operation.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    None
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/auth.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    None
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Path parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Headers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Headers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#non-cookie-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-cookie headers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cookie-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cookie headers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-body" class="md-nav__link">
+    <span class="md-ellipsis">
+      Request body
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#return-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      Return type
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Return type">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mapping-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mapping headers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-error-responses" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling error responses
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Operation</h1>
+
+<p>Methods decorated with one of @get, @post, @put, etc. are transformed into operation methods. Invoking these methods
+initiates an HTTP request-response cycle. Lapidary is designed to be compatible with the HTTP methods defined in OpenAPI
+3.x, which include all methods defined in RFC 9110, with the exception of CONNECT. Methods in your client that aren't
+decorated with these operation decorators are simply ignored.</p>
+<div class="admonition note methods">
+<p class="admonition-title">Note</p>
+<p>Python methods and HTTP methods represent two distinct concepts.</p>
+<p>Throughout this documentation, the term <code>method</code> in a programming context always refers to a Python method (defined with <code>def</code>), whereas <code>HTTP methods</code> (GET, POST, etc.) are specified as such.</p>
+</div>
+<pre><code class="language-python">from lapidary.runtime import ClientBase, get
+
+
+class CatClient(ClientBase):
+
+    @get('/cats')
+    async def list_cats(...):
+        pass
+</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the examples below, methods are depicted as standalone functions, with the encapsulating class structure omitted.</p>
+</div>
+<pre><code class="language-python">@get('/cats')  # method and path
+async def list_cats(...):
+    pass
+</code></pre>
+<h2 id="parameters">Parameters</h2>
+<p>Parameters within Lapidary are designed to represent different components of an HTTP request, including headers,
+cookies, query parameters, path parameters, and the body of the request.</p>
+<p>It's essential that every parameter, including self, is annotated to define its role and type explicitly. Note that *
+args and **kwargs are not supported in this structure to maintain clarity and specificity in request definition.</p>
+<h3 id="query-parameters">Query parameters</h3>
+<p>Query parameters are elements added to the URL following the '?' character, serving to modify or refine the request. An
+example format is https://example.com/path?param=value.</p>
+<p>To declare a query parameter in Lapidary, use the Query() annotation:</p>
+<pre><code class="language-python">@get('/cats')
+async def list_cats(
+        self: Self,
+        color: Annotated[str, Query()],
+):
+    pass
+</code></pre>
+<p>Calling a method like this:</p>
+<pre><code class="language-python">client.list_cats(color='black')
+</code></pre>
+<p>results in a GET request being sent to the following URL: https://example.com/cats?color=black.</p>
+<p>This illustrates how arguments passed to the method are directly mapped to query parameters in the URL, forming a
+complete HTTP request based on the method's decoration and the parameters' annotations.</p>
+<h3 id="path-parameters">Path parameters</h3>
+<p>Path parameters are variables embedded within the path of a request URL, such as http://example.com/cat/{cat_id}. These
+parameters are essential for accessing specific resources or performing operations on them.</p>
+<p>To define a path parameter in Lapidary, you use the path variable inside the decorator URL path and annotate the method
+parameter with Path(). Here is an example of how to define and use a path parameter:</p>
+<pre><code class="language-python">@get('/cat/{cat_id}')
+async def get_cat(
+        self: Self,
+        cat_id: Annotated[str, Path()],
+):
+    pass
+</code></pre>
+<p>When you call this method like so:</p>
+<pre><code class="language-python">client.get_cat(cat_id=1)
+</code></pre>
+<p>it constructs and sends a GET request to https://example.com/cat/1. This demonstrates the method's ability to
+dynamically incorporate the provided argument (cat_id=1) into the request URL as a path parameter.</p>
+<h2 id="headers">Headers</h2>
+<h3 id="non-cookie-headers">Non-cookie headers</h3>
+<p>Header parameters are utilized to add HTTP headers to a request. These can be defined using the Header() annotation in a
+method declaration, specifying the header name and the expected value type.</p>
+<p>Example:</p>
+<pre><code class="language-python">@get('/cats')
+async def list_cats(
+        self: Self,
+    version: Annotated[str, Header('version')],
+):
+    pass
+</code></pre>
+<p>Invoking this method with:</p>
+<pre><code class="language-python">client.list_cats(version='2')
+</code></pre>
+<p>results in the execution of a GET request that includes the header <code>version: 2</code>.</p>
+<p>Note: The Cookie, Header, Param, and Query annotations all accept parameters such as name, style, and explode as defined
+by OpenAPI.</p>
+<h3 id="cookie-headers">Cookie headers</h3>
+<p>To add a cookie to the request, you use the Cookie parameter. This adds a name=value pair to the Cookie header of the
+HTTP request.</p>
+<p>Example:</p>
+<pre><code class="language-python">@get('/cats')
+async def list_cats(
+        self: Self,
+        cookie_key: Annotated[str, Cookie('key')],
+):
+    pass
+</code></pre>
+<p>Calling this method as</p>
+<pre><code class="language-python">client.list_cats(cookie_key='value')
+</code></pre>
+<p>will send a GET request that includes the header Cookie: key=value.</p>
+<h2 id="request-body">Request body</h2>
+<p>To mark a parameter for serialization into the HTTP body, annotate it with RequestBody. Each method can include only one
+such parameter.</p>
+<p>Example:</p>
+<pre><code class="language-python">@POST('/cat')
+async def add_cat(
+        self: Self,
+        cat: Annotated[Cat, RequestBody({
+            'application/json': Cat,
+        })],
+):
+    pass
+</code></pre>
+<p>The parameter type, such as Cat in this example, should be a basic scalar (e.g., str, int, float, date, datetime, UUID)
+or a Pydantic model, to facilitate proper serialization.</p>
+<p>Invoking this method constructs a POST request with Content-Type: application/json header. The cat object is serialized
+to JSON using Pydantic's BaseModel.model_dump_json() and included in the body of the request.</p>
+<h2 id="return-type">Return type</h2>
+<p>The Responses annotation plays a crucial role in mapping HTTP status codes and Content-Type headers to specific return
+types. This mechanism allows developers to define how responses are parsed and returned.</p>
+<p>The return type is specified in two places:</p>
+<ol>
+<li>
+<p>At the method signature level - The declared return type here should reflect the expected successful response
+   structure. It can be a single type or a Union of types, accommodating various potential non-error response bodies.</p>
+</li>
+<li>
+<p>Within the <code>Responses</code> annotation - This details the specific type or types to be used for parsing the response body,
+   depending on the response's HTTP status code and content type matching those specified.</p>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The type hint in the method's annotation must match the response types specified within the Responses() annotation, excluding exception types. For details on how to handle exception types, see the next section.</p>
+</div>
+<p>Example:</p>
+<pre><code class="language-python">@get('/cat')
+async def list_cats(self: Self) -&gt; Annotated[
+    List[Cat],
+    Responses({
+        '2XX': {
+            'application/json': List[Cat],
+        },
+    })
+]:
+    pass
+</code></pre>
+<p>In this setup, the Responses dictionary specifies that for responses with a 2XX status code and a Content-Type of
+application/json, the response body will be parsed as a list of Cat objects. This explicit declaration ensures that the
+method's return type is tightly coupled with the anticipated successful response structure, providing clarity and type
+safety for API interactions.</p>
+<h3 id="mapping-headers">Mapping headers</h3>
+<p>Lapidary supports an additional response type that envelops the response body and allows declaring response headers.</p>
+<p>Example:</p>
+<pre><code class="language-python">
+class CatsListResponse(ResponseEnvelope):
+   body: Annotated[List[Cat], ResponseBody()]
+   total_count: Annotated[int, ResponseHeader('X-Total-Count')]
+
+class CatClient(ClientBase):
+   @get('/cat')
+   async def list_cats(self: Self) -&gt; Annotated[
+       CatsListResponse,
+       Responses({
+           '2XX': {
+               'application/json': CatsListResponse,
+           },
+       })
+   ]:
+       pass
+
+client = CatClient()
+cats_response = await client.list_cats()
+assert cats_response.body == [Cat(...)]
+assert cats_response.count == 1
+</code></pre>
+<h3 id="handling-error-responses">Handling error responses</h3>
+<p>Lapidary allows you to map specific responses to exceptions. This feature is commonly used for error responses, like
+those with non-2XX status codes, but it's not limited to them. Any response specified in the Responses annotation can be
+set to raise an exception if it meets the defined conditions. This gives developers the flexibility to either raise
+exceptions for particular responses or handle them in the standard flow, based on what's needed for the application.</p>
+<pre><code class="language-python">from dataclasses import dataclass
+
+
+@dataclass
+class ErrorModel(Exception):
+    error_code: int
+    error_message: str
+
+
+@get('/cat')
+async def list_cats(
+        self: Self,
+) -&gt; Annotated[
+    List[Cat],
+    Responses({
+        '2XX': {...},
+        '4XX': {
+            'application/json': ErrorModel,
+        }
+    }),
+]:
+    pass
+</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When creating a response model to be raised as an exception, it cannot derive from both pydantic.BaseModel and Exception due to inheritance conflicts. Opt for a straightforward class or a dataclass.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Exception types mapped to responses in the Responses annotation should not be included in the method's return type hint. They are exclusively declared within the Responses framework for appropriate processing.</p>
+</div>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2024 Rafał Krupiński
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.sections"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.081f42fc.min.js"></script>
+      
+    
+  </body>
+</html>
