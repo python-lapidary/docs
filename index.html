@@ -12,10 +12,10 @@
       
       
       
-        <link rel="next" href="lapidary/usage/client/">
+        <link rel="next" href="lapidary-runtime/usage/client/">
       
       
-      <link rel="icon" href="logo.png">
+      <link rel="icon" href="logo.svg">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
     
     
@@ -42,6 +42,8 @@
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -105,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Lapidary
             
           </span>
         </div>
@@ -197,7 +199,7 @@
           
   
   <span class="md-ellipsis">
-    Home
+    Lapidary
   </span>
   
 
@@ -208,7 +210,7 @@
         
   
   <span class="md-ellipsis">
-    Home
+    Lapidary
   </span>
   
 
@@ -233,24 +235,6 @@
   <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
       Features
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Installation
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
     </span>
   </a>
   
@@ -290,7 +274,7 @@
             
   
   <span class="md-ellipsis">
-    Lapidary
+    Lapidary runtime
   </span>
   
 
@@ -300,7 +284,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            Lapidary
+            Lapidary runtime
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -348,7 +332,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lapidary/usage/client/" class="md-nav__link">
+      <a href="lapidary-runtime/usage/client/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -369,7 +353,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lapidary/usage/operation/" class="md-nav__link">
+      <a href="lapidary-runtime/usage/operation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -390,7 +374,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lapidary/usage/auth/" class="md-nav__link">
+      <a href="lapidary-runtime/usage/auth/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -456,7 +440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="lapidary/reference/lapidary/" class="md-nav__link">
+      <a href="lapidary-runtime/reference/lapidary/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -473,6 +457,74 @@
           </ul>
         </nav>
       
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Lapidary render
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Lapidary render
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lapidary-render/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lapidary Render
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -520,24 +572,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Installation
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -556,67 +590,39 @@
   
 
 
-<p><a href="https://github.com/python-lapidary/lapidary/actions/workflows/test.yaml"><img alt="test" src="https://github.com/python-lapidary/lapidary/actions/workflows/test.yaml/badge.svg" /></a></p>
-<h1 id="lapidary">Lapidary</h1>
+<h1 id="lapidary"><a href="lapidary/docs/index.md">Lapidary</a></h1>
 <p>Python DSL for Web API clients.</p>
-<p>Also check <a href="https://github.com/python-lapidary/lapidary-render/">lapidary-render</a>,
-a command line program that generates Lapidary clients from OpenAPI.</p>
 <h2 id="features">Features</h2>
 <ul class="task-list">
-<li class="task-list-item"><input type="checkbox" disabled checked/> Write Web API clients declaratively</li>
+<li class="task-list-item"><input type="checkbox" disabled checked/> In-python DSL for writing Web API clients declaratively</li>
 <li class="task-list-item"><input type="checkbox" disabled checked/> Use pydantic models for JSON data</li>
-<li class="task-list-item"><input type="checkbox" disabled/> Compatibility with OpenAPI 3.0 and 3.1</li>
+<li class="task-list-item"><input type="checkbox" disabled/> Compatibility with OpenAPI<ul>
+<li>3.0 (in-progress)</li>
+<li>3.1 (planned)</li>
 </ul>
-<h2 id="installation">Installation</h2>
-<pre><code class="language-console">pip install lapidary
-</code></pre>
-<p>or with Poetry</p>
-<pre><code class="language-console">poetry add lapidary
-</code></pre>
-<h2 id="usage">Usage</h2>
-<p>With Lapidary, you define an API client by creating a class that mirrors the API structure, akin to OpenAPI but through
-decorated and annotated Python methods. Calling these method handles making HTTP requests and transforming the responses
-back into Python objects.</p>
-<pre><code class="language-python">from typing import Annotated, Self
-from lapidary.runtime import *
-
-# Define models
-
-class Cat(ModelBase):
-    id: int
-    name: str
-
-# Declare the client
-
-class CatClient(ClientBase):
-    def __init__(
-        self,
-        base_url='http://localhost:8080/api',
-    ):
-        super().__init__(base_url=base_url)
-
-    @get('/cat/{id}')
-    async def cat_get(
-        self: Self,
-        *,
-        id: Annotated[int, Path(style=ParamStyle.simple)],
-    ) -&gt; Annotated[Cat, Responses({
-        '2XX': {
-            'application/json': Cat
-        },
-    })]:
-        pass
-
-# User code
-
-async def main():
-    client = CatClient()
-    cat = await client.cat_get(id=7)
-</code></pre>
-<p>See <a href="https://github.com/python-lapidary/lapidary/blob/develop/tests/test_client.py">this test file</a> for a working
-example.</p>
-<p><a href="https://lapidary.dev">Full documentation</a></p>
-<p>Also check the <a href="https://github.com/orgs/lapidary-library/repositories">library of clients</a>.</p>
+</li>
+</ul>
+<h1 id="lapidary-render"><a href="lapidary-render/docs/">Lapidary Render</a></h1>
+<p>Code generator that creates Web API client code from an OpenAPI document.</p>
+<h2 id="features_1">Features</h2>
+<ul class="task-list">
+<li class="task-list-item">
+<p><input type="checkbox" disabled checked/> Deliver IDE-friendly client code that simplifies communication with API servers.</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled checked/> The generator code should be simple.</p>
+<p>Lapidary-render does most of the processing in Python, only leaving the rendering to Jinja templates.</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled checked/> Client code should be simple.</p>
+<p>The generated code uses the <code>lapidary</code> DSL library, which makes the client code DRY and similar in style to API servers that use Litestar or FastAPI.</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Compatible changes to the OpenAPI document should result in compatible changes to the generated code.</p>
+<p>Whenever possible, generated names should not depend on elements position, or the presence or absence of other elements.</p>
+<p><em>Starting from version 1.0; terms and conditions apply.</em></p>
+</li>
+</ul>
 
 
 
@@ -669,7 +675,7 @@ example.</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.sections"], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.sections"], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="assets/javascripts/bundle.081f42fc.min.js"></script>
