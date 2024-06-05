@@ -5,6 +5,7 @@ docs_dir: ../docs
 site_dir: ../site
 
 nav:
+- index.md
 - Usage:
   - usage/client.md
   - usage/operation.md
