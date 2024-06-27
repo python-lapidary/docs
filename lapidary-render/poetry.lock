@@ -441,6 +441,24 @@ pluggy = ">=1.5,<2.0"
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-asyncio"
+version = "0.23.7"
+description = "Pytest support for asyncio"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pytest_asyncio-0.23.7-py3-none-any.whl", hash = "sha256:009b48127fbe44518a547bddd25611551b0e43ccdbf1e67d12479f569832c20b"},
+    {file = "pytest_asyncio-0.23.7.tar.gz", hash = "sha256:5f5c72948f4c49e7db4f29f2521d4031f1c27f86e57b046126654083d4770268"},
+]
+
+[package.dependencies]
+pytest = ">=7.0.0,<9"
+
+[package.extras]
+docs = ["sphinx (>=5.3)", "sphinx-rtd-theme (>=1.0)"]
+testing = ["coverage (>=6.2)", "hypothesis (>=5.7.1)"]
+
+[[package]]
 name = "pytest-httpx"
 version = "0.30.0"
 description = "Send responses to httpx."
@@ -548,13 +566,13 @@ files = [
 
 [[package]]
 name = "rybak"
-version = "0.3.0"
+version = "0.4.0"
 description = "Directory-tree generator library"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "rybak-0.3.0-py3-none-any.whl", hash = "sha256:c71ed1ac4b4c9e8d84aadd7f96dd2939c3e0b070eaab4aa6054fe0d3e22002a4"},
-    {file = "rybak-0.3.0.tar.gz", hash = "sha256:a9c1224a79c036a248e42b7e81078380fbdd6f5f1ddfb88323133e9b7e8aeff2"},
+    {file = "rybak-0.4.0-py3-none-any.whl", hash = "sha256:45fbc6bf850a7ea6ff37f05cfd7d706dfa8b39b10a9e7c134dc9e11ea147dea2"},
+    {file = "rybak-0.4.0.tar.gz", hash = "sha256:b40c8d8c8654d959b973fa5e9a150d3914d4209ff05aaff9103159c39845e387"},
 ]
 
 [package.dependencies]
@@ -589,4 +607,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "23bdbce82782d07b42f3169c9d6561538df8c547a2546231031d1924dc4c5c6f"
+content-hash = "689f6eade2ba3294726bc64f4a1a6b814b24b2e67de60fe2e874c711aa51b848"
