@@ -580,105 +580,106 @@
 
 <h1 id="openapi-compatibility">OpenAPI compatibility</h1>
 <ul>
-<li>openapi: validated (3.0.* accepted)</li>
-<li>info<ul>
-<li>license: Not usable. It's up to the user to verify the accepted use.</li>
-<li>title and other fields: planned as part of project readme</li>
+<li>✅ <code>openapi</code>: validated (3.0.* accepted)</li>
+<li><code>info</code><ul>
+<li>❌ <code>license</code>: N/A; it's up to the user to verify the accepted use.</li>
+<li>🗓️ <code>title</code> and other fields: planned as part of project readme</li>
 </ul>
 </li>
-<li>externalDocs: planned as part of the project readme</li>
-<li>servers: first server is used<ul>
-<li>url: used as the base URL</li>
-<li>variables: default values are used to evaluate the server URL</li>
+<li>🗓️ <code>externalDocs</code>: planned as part of the project readme</li>
+<li>✅ <code>servers</code>: first server is used<ul>
+<li>✅ <code>url</code>: used as the base URL</li>
+<li>✅ <code>variables</code>: default values are used to evaluate the server URL</li>
 </ul>
 </li>
-<li>security: implemented</li>
-<li>tags: ignored, not planned</li>
-<li>components<ul>
-<li>schemas:<ul>
-<li>title: planned as part of class docstr</li>
-<li>type<ul>
-<li>[no value]: planned as primitive JSON-compatible object.</li>
-<li>object: implemented as pydantic models</li>
-<li>array: implemented as list</li>
-<li>string, integer, number, boolean: implemented as str, int, float and bool</li>
+<li>✅ <code>security</code>: implemented</li>
+<li>❌ <code>tags</code>: ignored</li>
+<li><code>components</code><ul>
+<li>✅ <code>schemas</code>:<ul>
+<li>🗓️ <code>title</code>: planned as part of class docstr</li>
+<li><code>type</code><ul>
+<li>🗓️ [no value]: planned as primitive JSON-compatible object.</li>
+<li>✅ <code>object</code>: implemented as pydantic models</li>
+<li>✅ <code>array</code>: implemented as list</li>
+<li>✅ <code>string</code>, <code>integer</code>, <code>number</code>, <code>boolean</code>: implemented as <code>str</code>, <code>int</code>, <code>float</code> and <code>bool</code></li>
 </ul>
 </li>
-<li>format: planned, including custom formats</li>
-<li>validation keyword: supported by pydantic</li>
-<li>allOf: needs improvement</li>
-<li>oneOf and anyOf: implemented as union</li>
-<li>not: planned for objects</li>
-<li>required: non-required properties are turned to <code>Union[None, $type]</code></li>
-<li>additionalProperties:<ul>
-<li>boolean: supported as pydantic <code>extra: 'allow'</code> or <code>'forbid'</code></li>
-<li>schema: planned as a <code>Mapping</code> field</li>
+<li>🗓️ <code>format</code>: planned, including custom formats</li>
+<li>✅ assertion keywords: as supported by pydantic</li>
+<li>⚠️ <code>allOf</code>: needs improvement</li>
+<li>✅ <code>anyOf</code>: implemented as union</li>
+<li>⚠️ <code>oneOf</code>: treated as <code>anyOf</code> and implemented as <code>Union</code></li>
+<li>🗓️ <code>not</code>: planned for objects</li>
+<li>✅ <code>required</code>: non-required properties are turned to <code>Union[None, $type]</code></li>
+<li><code>additionalProperties</code>:<ul>
+<li>✅ boolean: supported as pydantic <code>extra: 'allow'</code> or <code>'forbid'</code></li>
+<li>🗓️ schema: planned as a <code>Mapping</code> field</li>
 </ul>
 </li>
-<li>patternProperties: planned as <code>Mapping</code> field</li>
-<li>enum: ignored; might be implemented for simple types as <code>Literal</code></li>
-<li>description: planned as part of docstr</li>
-<li>default: if present, the property type turned to <code>Union[None, $type]</code> and has default value <code>None</code><ul>
-<li>caveat: default values are not to be sent between Web API client and server, instead they are implied be the receiving side. Lapidary could potentially fill such values in response models, but it might be expensive, so it's not planned.</li>
+<li>🗓️ <code>patternProperties</code>: planned as <code>Mapping</code> field</li>
+<li>🔍 <code>enum</code>: ignored; might be implemented for simple types as <code>Literal</code></li>
+<li>📄 <code>description</code>: planned as part of docstr</li>
+<li>✅ <code>default</code>: if present, the property type turned to <code>Union[None, $type]</code> and has default value <code>None</code><ul>
+<li>🔍 caveat: default values are not to be sent between Web API client and server, instead they are implied be the receiving side. Lapidary could potentially fill such values in response models, but it might be expensive, so it would be an optional feature.</li>
 </ul>
 </li>
-<li>nullable: if true, the property type is turned to <code>Union[None, $type]</code></li>
-<li>readOnly &amp; writeOnly: if either is true, the property type is turned to <code>Union[None, $type]</code> and has default value <code>None</code>; planned as part of docstr<ul>
-<li>caveat: readOnly properties are only to be sent to API server, and writeOnly only to be received by the client. A property might be both required one way, and invalid the other way, which could not be directly represented in Python.</li>
+<li>✅ <code>nullable</code>: if true, the property type is turned to <code>Union[None, $type]</code></li>
+<li>✅ <code>readOnly</code> &amp; <code>writeOnly</code>: if either is true, the property type is turned to <code>Union[None, $type]</code> and has default value <code>None</code>; planned as part of docstr<ul>
+<li>⚠️ caveat: readOnly properties are only to be sent to API server, and writeOnly only to be received by the client. A property might be both required one way, and invalid the other way, which could not be directly represented in Python, except with two or three classes for every schema.</li>
 </ul>
 </li>
-<li>discriminator: ignored</li>
-<li>example: might be used as part of docstr</li>
-<li>externalDocs: planned as part of docstr</li>
-<li>deprecated: planned</li>
-<li>xml: ignored, currently not planned</li>
+<li>❌ <code>discriminator</code>: ignored</li>
+<li>🔍 <code>example</code>: might be used as part of docstr</li>
+<li>🗓️ <code>externalDocs</code>: planned as part of docstr</li>
+<li>🗓️ <code>deprecated</code>: planned</li>
+<li>❌ <code>xml</code>: ignored, currently not planned</li>
 </ul>
 </li>
-<li>responses<ul>
-<li>description: planned as part of docstr</li>
-<li>headers: if present, used as fields in the response envelope class</li>
-<li>content: implemented; used as operation method return type, and a way to resolve model type for a response</li>
-<li>links: ignored; might be used to generate methods in the response envelope</li>
+<li><code>responses</code><ul>
+<li>🗓️ <code>description</code>: planned as part of docstr</li>
+<li>✅ <code>headers</code>: if present, used as fields in the response envelope class</li>
+<li>✅ <code>content</code>: implemented; used as operation method return type, and a way to resolve model type for a response</li>
+<li>🔍 <code>links</code>: ignored; might be used to generate methods in the response envelope</li>
 </ul>
 </li>
-<li>parameters: used in-line in operations</li>
-<li>examples: ignored</li>
-<li>requestBodies<ul>
-<li>description: planned as part of docstr</li>
-<li>content: implemented</li>
-<li>required: planned</li>
+<li>✅ <code>parameters</code>: used in-line in operations</li>
+<li>🔍 <code>examples</code>: currently ignored</li>
+<li><code>requestBodies</code><ul>
+<li>🗓️ <code>description</code>: planned as part of docstr</li>
+<li>✅ <code>content</code>: implemented</li>
+<li>🗓️ <code>required</code>: planned</li>
 </ul>
 </li>
-<li>headers: implemented</li>
-<li>securitySchemes: implemented with httpx_auth<ul>
-<li>refreshUrl: not supported</li>
+<li>✅ <code>headers</code>: implemented</li>
+<li>⚠️ <code>securitySchemes</code>: implemented with httpx_auth<ul>
+<li>❌ <code>refreshUrl</code>: not supported</li>
 </ul>
 </li>
-<li>links: planned</li>
-<li>callbacks: not planned</li>
+<li>🗓️ <code>links</code>: planned</li>
+<li>❌ <code>callbacks</code>: not planned</li>
 </ul>
 </li>
-<li>paths<ul>
-<li>summary, description: planned as parts of docstr</li>
-<li>servers: ignored</li>
-<li>parameters<ul>
-<li>name: OpenAPI parameter names are not unique and might contain characters invalid for python names, therefore they're escaped and suffix-hungarian notation is used to distinguish between cookie, header, path and query parameters</li>
-<li>in: implemented, suffix-hungarian notation is used to separate parameters</li>
-<li>required: non-required parameters are optional with default value <code>None</code></li>
-<li>deprecated: planned</li>
-<li>allowEmtyValue: planned</li>
-<li>content: key: planned, value: processed as schema</li>
-<li>style: partially implemented</li>
-<li>allowReserved: planned</li>
-<li>schema: implemented</li>
-<li>example &amp; examples: planned</li>
-<li>x-lapidary-name: name of a parameter in the python</li>
+<li><code>paths</code><ul>
+<li>🗓️ <code>summary</code>, <code>description</code>: planned as parts of docstr</li>
+<li>❌ <code>servers</code>: ignored</li>
+<li><code>parameters</code><ul>
+<li>✅ <code>name</code>: OpenAPI parameter names are not unique and might contain characters invalid for python names, therefore they're escaped and suffix-hungarian notation is used to distinguish between cookie, header, path and query parameters</li>
+<li>✅ <code>in</code>: implemented, suffix-hungarian notation is used to separate parameters</li>
+<li>✅ <code>required</code>: non-required parameters are optional with default value <code>None</code></li>
+<li>🗓️ <code>deprecated</code>: planned</li>
+<li>🗓️ <code>allowEmptyValue</code>: planned</li>
+<li>🗓️ <code>content</code>: key: planned, value: processed as schema</li>
+<li>⚠️ <code>style</code>: partially implemented</li>
+<li>🗓️ <code>allowReserved</code>: planned</li>
+<li>✅ <code>schema</code>: implemented</li>
+<li>🔍 <code>example</code> &amp; examples: considered</li>
+<li>🔧 <code>x-lapidary-name</code>: name of a parameter in the python</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>x-lapidary-responses-global: responses that might come from any operation</li>
-<li>x-lapidary-headers-global: headers accepted by any operation</li>
+<li>🔧 <code>x-lapidary-responses-global</code>: responses that might come from any operation</li>
+<li>🔧 <code>x-lapidary-headers-global</code>: headers accepted by any operation</li>
 </ul>
 
 
