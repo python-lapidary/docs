@@ -9,12 +9,17 @@ paths:
       operationId: test_op
       responses:
         default:
+          description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/all'
-          description: ''
-
+          headers:
+            x-count:
+              schema:
+                type: integer
+        '300':
+          $ref: '#/components/responses/default'
       parameters:
       - name: param1
         in: query
@@ -31,7 +36,29 @@ paths:
           additionalProperties: false
           required:
           - prop1
-        required: true
+        required: false
+  /inline_schema_properties/:
+    get:
+      operationId: inline_schema_properties
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prop1:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      prop2:
+                        type: string
+                    required:
+                    - prop2
+                additionalProperties: false
+                required:
+                - prop1
   /custom-security:
     get:
       description: Operation with its own security defined
@@ -41,23 +68,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/all'
+                type: array
+                items:
+                  $ref: '#/components/schemas/all'
           description: ''
       security:
       - oauth:
         - read
   /insecure:
     get:
+      requestBody:
+        $ref: '#/components/requestBodies/dummy'
       description: Operation with no security requirements
-      operationId: customSecurity
+      operationId: insecure
       responses:
         default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/all'
-          description: ''
-      security: []
+          $ref: '#/components/responses/default'
+      security: [ ]
 
 
 components:
@@ -181,6 +208,27 @@ components:
     http_digest:
       type: http
       scheme: digest
+  responses:
+    default:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/all'
+      description: ''
+  requestBodies:
+    dummy:
+      required: false
+      description: ''
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              prop1:
+                type: string
+            additionalProperties: false
+            required:
+            - prop1
 
 security:
 - oauth-refresh:
