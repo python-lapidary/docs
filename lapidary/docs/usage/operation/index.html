@@ -816,7 +816,7 @@ types. This mechanism allows developers to define how responses are parsed and r
 <p>Example:</p>
 <pre><code class="language-python">@get('/cat')
 async def list_cats(self: Self) -&gt; Annotated[
-    List[Cat],
+    Awaitable[List[Cat]],
     Responses({
         '2XX': {
             'application/json': List[Cat],
@@ -840,7 +840,7 @@ class CatsListResponse(ResponseEnvelope):
 class CatClient(ClientBase):
    @get('/cat')
    async def list_cats(self: Self) -&gt; Annotated[
-       CatsListResponse,
+       Awaitable[CatsListResponse],
        Responses({
            '2XX': {
                'application/json': CatsListResponse,
@@ -872,7 +872,7 @@ class ErrorModel(Exception):
 async def list_cats(
         self: Self,
 ) -&gt; Annotated[
-    List[Cat],
+    Awaitable[List[Cat]],
     Responses({
         '2XX': {...},
         '4XX': {
