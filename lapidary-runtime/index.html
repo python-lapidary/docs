@@ -690,7 +690,8 @@
 <p>With Lapidary, you define an API client by creating a class that mirrors the API structure, akin to OpenAPI but through
 decorated and annotated Python methods. Calling these method handles making HTTP requests and transforming the responses
 back into Python objects.</p>
-<pre><code class="language-python">from typing import Annotated, Self
+<pre><code class="language-python">from collections.abc import Awaitable
+from typing import Annotated, Self
 from lapidary.runtime import *
 
 # Define models
@@ -713,7 +714,7 @@ class CatClient(ClientBase):
         self: Self,
         *,
         id: Annotated[int, Path(style=ParamStyle.simple)],
-    ) -&gt; Annotated[Cat, Responses({
+    ) -&gt; Annotated[Awaitable[Cat], Responses({
         '2XX': {
             'application/json': Cat
         },
