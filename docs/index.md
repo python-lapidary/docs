@@ -7,7 +7,7 @@ Python DSL for Web API clients.
 - [x] In-python DSL for writing Web API clients declaratively
 - [x] Use pydantic models for JSON data
 - [ ] Compatibility with OpenAPI
-    - 3.0 (in-progress)
+    - [3.0 (in-progress)](lapidary-render/docs/openapi.md)
     - 3.1 (planned)
 
 # [Lapidary Render](./lapidary-render/docs/index.md)
