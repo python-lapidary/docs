@@ -505,24 +505,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#lapidary.runtime.ResponseBody" class="md-nav__link">
-    <span class="md-ellipsis">
-      ResponseBody
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#lapidary.runtime.ResponseEnvelope" class="md-nav__link">
-    <span class="md-ellipsis">
-      ResponseEnvelope
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -701,24 +683,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#lapidary.runtime.ResponseBody" class="md-nav__link">
-    <span class="md-ellipsis">
-      ResponseBody
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#lapidary.runtime.ResponseEnvelope" class="md-nav__link">
-    <span class="md-ellipsis">
-      ResponseEnvelope
-    </span>
-  </a>
   
 </li>
       
@@ -939,100 +903,6 @@ Calling with no parameters removes all references</p>
 
 
   </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="lapidary.runtime.ResponseBody" class="doc doc-heading">
-            <code>ResponseBody</code>
-
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><span title="lapidary.runtime.model.annotations.NameTypeAwareAnnotation">NameTypeAwareAnnotation</span></code>, <code><span title="lapidary.runtime.model.response.ResponseHandler">ResponseHandler</span></code></p>
-
-
-      <p>Annotate response body within an Envelope type.</p>
-
-              <details class="quote">
-                <summary>Source code in <code>docs/lapidary/src/lapidary/runtime/model/annotations.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ResponseBody</span><span class="p">(</span><span class="n">NameTypeAwareAnnotation</span><span class="p">,</span> <span class="n">ResponseHandler</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotate response body within an Envelope type.&quot;&quot;&quot;</span>
-
-    <span class="n">_parse</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">bytes</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">supply_formal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">typ</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">supply_formal</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">TypeAdapter</span><span class="p">(</span><span class="n">typ</span><span class="p">)</span><span class="o">.</span><span class="n">validate_json</span>
-
-    <span class="k">def</span> <span class="nf">apply_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Response</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">MutableMapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fields</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-              </details>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h2 id="lapidary.runtime.ResponseEnvelope" class="doc doc-heading">
-            <code>ResponseEnvelope</code>
-
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><span title="abc.ABC">ABC</span></code>, <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
-
-
-      <p>Marker interface for response envelopes.</p>
-
-              <details class="quote">
-                <summary>Source code in <code>docs/lapidary/src/lapidary/runtime/model/response.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ResponseEnvelope</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">,</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Marker interface for response envelopes.&quot;&quot;&quot;</span>
-</code></pre></div></td></tr></table></div>
-              </details>
 
     </div>
 
