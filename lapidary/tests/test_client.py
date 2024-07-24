@@ -7,7 +7,7 @@ import pytest
 import typing_extensions as typing
 from starlette.responses import JSONResponse
 
-from lapidary.runtime import Body, ClientBase, Header, ParamStyle, Path, Responses, get, post, put
+from lapidary.runtime import Body, ClientBase, Header, Metadata, ParamStyle, Path, Response, Responses, get, post, put
 from lapidary.runtime.http_consts import MIME_JSON
 
 # model (common to both client and server)
@@ -38,7 +38,8 @@ cats_app = fastapi.FastAPI(debug=True)
 
 
 @cats_app.get('/cats', responses={'200': {'model': typing.List[Cat]}})
-async def cat_list() -> JSONResponse:
+async def cat_list(header: typing.Annotated[str, fastapi.Header()]) -> JSONResponse:
+    assert header == 'header-value'
     serializer = pydantic.TypeAdapter(typing.List[Cat])
     data = [Cat(id=1, name='Tom')]
     return JSONResponse(
@@ -71,7 +72,11 @@ async def login(body: AuthRequest) -> AuthResponse:
 # Client
 
 
-class CatListHeaders(pydantic.BaseModel):
+class CatListRequestHeaders(pydantic.BaseModel):
+    header: typing.Annotated[str, Header]
+
+
+class CatListResponseHeaders(pydantic.BaseModel):
     count: typing.Annotated[int, Header('X-Count')]
 
 
@@ -89,11 +94,12 @@ class CatClient(ClientBase):
     @get('/cats')
     async def cat_list(
         self: typing.Self,
+        meta: typing.Annotated[CatListRequestHeaders, Metadata],
     ) -> typing.Annotated[
-        tuple[list[Cat], CatListHeaders],
+        tuple[list[Cat], CatListResponseHeaders],
         Responses(
             {
-                'default': {'application/json': list[Cat]},
+                'default': Response(Body({'application/json': list[Cat]}), CatListResponseHeaders),
             }
         ),
     ]:
@@ -105,11 +111,11 @@ class CatClient(ClientBase):
         *,
         id: typing.Annotated[int, Path(style=ParamStyle.simple)],  # pylint: disable=redefined-builtin
     ) -> typing.Annotated[
-        Cat,
+        tuple[Cat, None],
         Responses(
             {
-                '2XX': {'application/json': Cat},
-                '4XX': {'application/json': ServerError},
+                '2XX': Response(Body({'application/json': Cat})),
+                '4XX': Response(Body({'application/json': ServerError})),
             }
         ),
     ]:
@@ -121,10 +127,10 @@ class CatClient(ClientBase):
         *,
         body: typing.Annotated[Cat, Body({'application/json': Cat})],
     ) -> typing.Annotated[
-        Cat,
+        tuple[Cat, None],
         Responses(
             {
-                'default': {'application/json': Cat},
+                'default': Response(Body({'application/json': Cat})),
             }
         ),
     ]:
@@ -136,12 +142,16 @@ class CatClient(ClientBase):
         *,
         body: typing.Annotated[AuthRequest, Body({MIME_JSON: AuthRequest})],
     ) -> typing.Annotated[
-        AuthResponse,
+        tuple[AuthResponse, None],
         Responses(
             {
-                '200': {
-                    MIME_JSON: AuthResponse,
-                }
+                '200': Response(
+                    Body(
+                        {
+                            MIME_JSON: AuthResponse,
+                        }
+                    )
+                )
             }
         ),
     ]:
@@ -155,19 +165,19 @@ client = CatClient(transport=httpx.ASGITransport(app=cats_app))
 
 @pytest.mark.asyncio
 async def test_request_response():
-    response_body, response_headers = await client.cat_list()
+    response_body, response_headers = await client.cat_list(meta=CatListRequestHeaders(header='header-value'))
     assert isinstance(response_body, list)
     assert response_body == [Cat(id=1, name='Tom')]
     assert response_headers.count == 1
 
-    cat = await client.cat_get(id=1)
+    cat, _ = await client.cat_get(id=1)
     assert isinstance(cat, Cat)
     assert cat == Cat(id=1, name='Tom')
 
 
 @pytest.mark.asyncio
 async def test_response_auth():
-    response = await client.login(body=AuthRequest(login='login', password='passwd'))
+    response, _ = await client.login(body=AuthRequest(login='login', password='passwd'))
 
     assert response.api_key == "you're in"
 

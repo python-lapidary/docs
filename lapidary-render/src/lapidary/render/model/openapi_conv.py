@@ -1,4 +1,5 @@
 import functools
+import itertools
 import logging
 from collections.abc import Callable, Iterable, Mapping, MutableMapping
 from typing import Any, cast
@@ -7,6 +8,7 @@ from mimeparse import parse_media_range
 
 from .. import json_pointer, names
 from . import openapi, python
+from .python import type_hint
 from .refs import resolve_ref
 from .schema import OpenApi30SchemaConverter, resolve_type_hint
 from .stack import Stack
@@ -24,7 +26,8 @@ class OpenApi30Converter:
         path_progress: Callable[[Any], None] | None = None,
     ):
         self.root_package = root_package
-        self.global_headers: dict[str, python.Parameter] = {}
+        self.global_headers: dict[str, python.MetaField] = {}
+        self.global_responses: dict[python.ResponseCode, python.Response]
         self.src = source
         self._origin = origin
         self._path_progress = path_progress
@@ -39,7 +42,7 @@ class OpenApi30Converter:
             package=str(root_package),
         )
 
-        self._response_mime_maps: MutableMapping[Stack, python.MimeMap] = {}
+        self._response_cache: MutableMapping[Stack, python.Response] = {}
 
     def process(self) -> python.ClientModel:
         stack = Stack()
@@ -56,7 +59,7 @@ class OpenApi30Converter:
             },
         )
 
-        self.target.schemas.extend(self.schema_converter.schema_modules)
+        self.target.model_modules.extend(self.schema_converter.schema_modules)
         return self.target
 
     def process_servers(self, value: list[openapi.Server] | None, stack: Stack) -> None:
@@ -97,20 +100,15 @@ class OpenApi30Converter:
             code: self.process_response(response, stack.push(code)) for code, response in value.responses.items()
         }
 
-    # Not providing process_parameters (plural) as each caller calls it in a different context
-    # (list, map or map with defaults)
-
     def _process_schema_or_content(
         self,
         value: openapi.ParameterBase,
         stack: Stack,
-    ) -> tuple[python.TypeHint, str]:
+    ) -> tuple[python.TypeHint, str | None]:
         if value.schema_ and value.content:
             raise ValueError()
         if value.schema_:
-            media_type: str | None = None
-            # encoding: str | None = None
-            return self.schema_converter.process_schema(value.schema_, stack.push('schema'), value.required), media_type
+            return self.schema_converter.process_schema(value.schema_, stack.push('schema'), value.required), None
         elif value.content:
             media_type, media_type_obj = next(iter(value.content.items()))
             # encoding = media_type_obj.encoding
@@ -120,8 +118,11 @@ class OpenApi30Converter:
         else:
             raise TypeError(f'{stack}: schema or content is required')
 
+    # Not providing process_parameters (plural) as each caller calls it in a different context
+    # (list, map or map with defaults)
+
     @resolve_ref
-    def process_parameter(self, value: openapi.Parameter, stack: Stack) -> python.Parameter:
+    def process_parameter(self, value: openapi.Parameter, stack: Stack) -> python.MetaField:
         logger.debug('process_parameter %s', stack)
 
         if not isinstance(value, openapi.ParameterBase):
@@ -129,11 +130,11 @@ class OpenApi30Converter:
 
         typ, media_type = self._process_schema_or_content(value, stack)
 
-        return python.Parameter(
+        return python.MetaField(
             name=parameter_name(value),
             alias=value.name,
             type=typ,
-            in_=value.in_,
+            annotation=value.in_.value.capitalize(),
             style=value.style,
             explode=value.explode,
             required=value.required,
@@ -150,10 +151,10 @@ class OpenApi30Converter:
         stack: Stack,
     ) -> None:
         common_params_stack = stack.push('parameters')
-        common_params = [
-            self.process_parameter(param, common_params_stack.push(str(idx)))
+        common_params = {
+            param.name: self.process_parameter(param, common_params_stack.push(str(idx)))
             for idx, param in enumerate(value.parameters)
-        ]
+        }
 
         for method, operation in value.model_extra.items():
             self.process_operation(operation, stack.push(method), common_params)
@@ -172,55 +173,50 @@ class OpenApi30Converter:
         self,
         value: openapi.Response,
         stack: Stack,
-    ) -> python.MimeMap:
+    ) -> python.Response:
         assert isinstance(value, openapi.Response)
 
-        if stack in self._response_mime_maps:
-            return self._response_mime_maps[stack]
+        if response := self._response_cache.get(stack):
+            return response
 
-        headers_stack = stack.push('headers')
+        response = python.Response(
+            content=self.process_content(value.content, stack.push('content')),
+            headers_type=self.process_headers(value.headers, stack.push('headers')),
+        )
+        self._response_cache[stack] = response
+        return response
 
-        headers = [self.process_header(header, headers_stack.push(name)) for name, header in value.headers.items()]
+    def process_headers(self, value: Mapping[str, openapi.Header], stack: Stack) -> python.TypeHint:
+        headers = [self.process_header(header, stack.push(name)) for name, header in value.items()]
+        if not headers:
+            return python.NONE
+        model = python.MetadataModel('ResponseMetadata', headers) if headers else None
+        typ = resolve_type_hint(str(self.root_package), stack.push('ResponseMetadata'))
 
-        mime_map_body_only = self.process_content(value.content, stack.push('content'))
-        mime_map = {
-            mime_type: self._create_envelope_model(
-                body_type=body_type,
-                headers=headers,
-                stack=stack,
+        self.target.model_modules.append(
+            python.MetadataModule(
+                path=python.ModulePath(typ.module, is_module=True),
+                body=[model],
             )
-            for mime_type, body_type in mime_map_body_only.items()
-        }
-        self._response_mime_maps[stack] = mime_map
-        return mime_map
+        )
+        return typ
 
     @resolve_ref
-    def process_header(self, value: openapi.Header, stack: Stack) -> python.ResponseHeader:
+    def process_header(self, value: openapi.Header, stack: Stack) -> python.MetaField:
         alias = stack.top()
 
         typ, _ = self._process_schema_or_content(value, stack)
 
-        return python.ResponseHeader(name=names.maybe_mangle_name(alias), alias=alias, type=typ, annotation='Header')
-
-    def _create_envelope_model(
-        self,
-        body_type: python.TypeHint,
-        headers: Iterable[python.ResponseHeader],
-        stack: Stack,
-    ) -> python.TypeHint:
-        envelope = python.ResponseEnvelopeModel(
-            name='Response',
-            headers=headers,
-            body_type=body_type,
+        python_name = names.maybe_mangle_name(alias)
+        return python.MetaField(
+            name=python_name,
+            alias=alias if python_name != alias else None,
+            type=typ,
+            annotation='Header',
+            required=value.required,
+            style=value.style,
+            explode=value.explode,
         )
-        type_hint = resolve_type_hint(str(self.root_package), stack.push('response', 'Response'))
-        self.target.add_response_envelope_module(
-            python.ResponseEnvelopeModule(
-                path=python.ModulePath(type_hint.module, is_module=True),
-                body=envelope,
-            )
-        )
-        return type_hint
 
     def process_content(self, value: Mapping[str, openapi.MediaType], stack: Stack) -> python.MimeMap:
         """Returns: {mime_type: response body type hint}"""
@@ -236,7 +232,7 @@ class OpenApi30Converter:
         self,
         value: openapi.Operation,
         stack: Stack,
-        common_params: Iterable[python.Parameter],
+        common_params: Mapping[str, python.MetaField],
     ) -> None:
         logger.debug('Process operation %s', stack)
 
@@ -251,6 +247,11 @@ class OpenApi30Converter:
         responses = self.process_responses(value.responses, stack.push('responses'))
         security = self.process_security(value.security, stack.push('security'))
 
+        return_types = set()
+        for response in responses.values():
+            body_type = type_hint.union_of(*response.content.values())
+            return_types.add(type_hint.tuple_of(body_type, response.headers_type))
+
         model = python.OperationFunction(
             name=value.operation_id,
             method=stack.top(),
@@ -258,6 +259,7 @@ class OpenApi30Converter:
             request_body=request_body,
             params=params,
             responses=responses,
+            return_type=type_hint.union_of(*return_types),
             security=security,
         )
 
@@ -267,15 +269,51 @@ class OpenApi30Converter:
         self,
         value: list[openapi.Parameter | openapi.Reference[openapi.Parameter]],
         stack: Stack,
-        common_params: Iterable[python.Parameter],
-    ) -> Iterable[python.Parameter]:
-        params = {}
-        for param in common_params:
-            params[param.name] = param
-        for idx, oa_param in enumerate(value):
-            param = self.process_parameter(oa_param, stack.push(str(idx)))
-            params[param.name] = param
-        return list(params.values())
+        common_params: Mapping[str, python.MetaField],
+    ) -> Iterable[python.MetaField]:
+        processed_params = [
+            self.process_parameter(oa_param, stack.push(str(idx)))
+            for idx, oa_param in enumerate(value)
+            if oa_param.name not in common_params
+        ]
+
+        all_fields = {field.name: field for field in itertools.chain(common_params.values(), processed_params)}.values()
+
+        direct_fields = []
+        metadata_fields = []
+        for field in all_fields:
+            if field.annotation in ('Cookie', 'Header'):
+                metadata_fields.append(field)
+            else:
+                direct_fields.append(field)
+        if metadata_fields:
+            metadata = self._mk_response_metafields_metamodel(metadata_fields, stack)
+            required = any(field.required for field in metadata_fields)
+            direct_fields.append(
+                python.MetaField(
+                    name='meta',
+                    alias=None,
+                    type=metadata if required else type_hint.optional(metadata),
+                    required=required,
+                    annotation='Headers',
+                    style=None,
+                    explode=None,
+                )
+            )
+
+        return direct_fields
+
+    def _mk_response_metafields_metamodel(self, value: Iterable[python.MetaField], stack: Stack) -> python.TypeHint:
+        fields = [field for field in value if field.annotation in ('Cookie', 'Header')]
+        metadata_model = python.MetadataModel('RequestMetadata', fields)
+        typ = resolve_type_hint(str(self.root_package), stack.push('meta', 'RequestMetadata'))
+        self.target.model_modules.append(
+            python.MetadataModule(
+                path=python.ModulePath(typ.module, is_module=True),
+                body=[metadata_model],
+            )
+        )
+        return typ
 
     def process_global_security(self, value: Iterable[openapi.SecurityRequirement] | None, stack: Stack) -> None:
         self.target.client.body.init_method.security = self.process_security(value, stack)

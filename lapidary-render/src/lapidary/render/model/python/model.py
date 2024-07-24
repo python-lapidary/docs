@@ -1,5 +1,6 @@
 import dataclasses as dc
 import enum
+import typing
 from collections.abc import Iterable, Mapping
 from typing import Any, Literal, TypeAlias
 
@@ -10,7 +11,6 @@ from .type_hint import NONE, TypeHint, union_of
 MimeType: TypeAlias = str
 ResponseCode: TypeAlias = str
 MimeMap: TypeAlias = Mapping[MimeType, TypeHint]
-ResponseMap: TypeAlias = Mapping[ResponseCode, MimeMap]
 SecurityRequirements: TypeAlias = Iterable[Mapping[str, Iterable[str]]]
 
 
@@ -105,21 +105,42 @@ class ClientCredentialsOAuth2Flow(OAuth2AuthBase):
     type: str = 'oauth2_client_credentials'
 
 
+@dc.dataclass(kw_only=True)
+class Response:
+    content: MimeMap
+    headers_type: TypeHint
+
+    def dependencies(self) -> Iterable[TypeHint]:
+        yield self.headers_type
+        yield from self.content.values()
+
+
+ResponseMap: typing.TypeAlias = Mapping[ResponseCode, Response]
+
+
 @dc.dataclass
 class OperationFunction:
-    name: str
+    # decorator
     method: str
     path: str
-    request_body: MimeMap
-    params: Iterable['Parameter']
-    responses: ResponseMap
     security: SecurityRequirements | None
+
+    # python signature
+    name: str
+    params: Iterable['MetaField']
+    return_type: TypeHint
+
+    # lapidary annotations
+    # request_body also makes a parameter
+    request_body: MimeMap
+    responses: ResponseMap
 
     def dependencies(self) -> Iterable[TypeHint]:
         yield self.request_body_type
         for param in self.params:
             yield from param.dependencies()
-        yield self.response_body_type
+        for response in self.responses.values():
+            yield from response.dependencies()
 
     @property
     def request_body_type(self) -> TypeHint:
@@ -128,16 +149,13 @@ class OperationFunction:
         types = self.request_body.values()
         return union_of(*types)
 
-    @property
-    def response_body_type(self) -> TypeHint:
-        types = set()
-        for mime_map in self.responses.values():
-            types.update(set(mime_map.values()))
-        return union_of(*types)
-
 
 @dc.dataclass(kw_only=True)
-class Parameter:
+class MetaField:
+    """
+    HTTP metadata field - headers, query and path parameters
+    """
+
     name: str
     """Python name"""
 
@@ -151,7 +169,8 @@ class Parameter:
     Required params are rendered before optional, and optional have default value None
     """
 
-    in_: ParamLocation
+    annotation: Literal['Cookie', 'Header', 'Headers', 'Link', 'Path', 'Query']
+
     default: Any = None
     """Default value, used only for global headers."""
 
@@ -189,13 +208,18 @@ class ClientInit:
     default_auth: str | None = None
     auth_models: Mapping[str, Auth] = dc.field(default_factory=dict)
     base_url: str | None = None
-    headers: Iterable[tuple[str, str]] = dc.field(default_factory=list)
-    response_map: ResponseMap = dc.field(default_factory=dict)
+
+    # FIXME
+    # headers: Iterable[tuple[str, str]] = dc.field(default_factory=list)
+    # response_map: ResponseMap = dc.field(default_factory=dict)
+
     security: SecurityRequirements | None = None
 
     def dependencies(self) -> Iterable[TypeHint]:
-        for mime_map in self.response_map.values():
-            yield from mime_map.values()
+        yield from ()
+        # FIXME
+        # for mime_map in self.response_map.values():
+        #     yield from mime_map.values()
 
 
 @dc.dataclass(frozen=True)
@@ -214,19 +238,16 @@ class ResponseHeader:
     name: str
     alias: str
     type: TypeHint
-    annotation: Literal['Cookie', 'Header', 'Link']
 
     def dependencies(self) -> Iterable[TypeHint]:
         yield self.type
 
 
 @dc.dataclass(frozen=True)
-class ResponseEnvelopeModel:
+class MetadataModel:
     name: str
-    headers: Iterable[ResponseHeader]
-    body_type: TypeHint
+    fields: Iterable[MetaField]
 
     def dependencies(self) -> Iterable[TypeHint]:
-        yield self.body_type
-        for header in self.headers:
+        for header in self.fields:
             yield from header.dependencies()
