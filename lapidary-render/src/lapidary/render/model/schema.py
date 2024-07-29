@@ -1,7 +1,12 @@
+import datetime as dt
+import decimal as dec
 import itertools
 import logging
+import uuid
 from collections import defaultdict
 from collections.abc import Callable, Iterable, MutableMapping, Sequence
+
+import typing_extensions as typing
 
 from .. import json_pointer, names
 from . import openapi, python
@@ -62,6 +67,19 @@ class OpenApi30SchemaConverter:
             typ = python.union_of(typ, python.NONE)
 
         field_props = {}
+        allowed_field_props = (
+            NUMERIC_CONSTRAINTS
+            if in_types(
+                typ,
+                (
+                    python.TypeHint.from_type(int),
+                    python.TypeHint.from_type(float),
+                    python.TypeHint.from_type(dec.Decimal),
+                    python.NONE,
+                ),
+            )
+            else None
+        )
 
         for k in value.model_fields_set:
             v = getattr(value, k)
@@ -78,6 +96,9 @@ class OpenApi30SchemaConverter:
                 continue
 
             field_prop = FIELD_PROPS[k]
+            if allowed_field_props is not None and field_prop not in allowed_field_props:
+                logger.warning('Ignoring unsupported constraint (%s) for type %s', field_prop, typ)
+                continue
 
             if isinstance(v, str):
                 if field_prop == 'pattern':
@@ -145,8 +166,10 @@ class OpenApi30SchemaConverter:
             return self._get_composite_type_hint(stack.push('allOf'), value.all_of)
         elif value.not_:
             raise NotImplementedError(stack.push('not'))
+        elif value.type == openapi.Type.string and value.format:
+            return self._process_string(value, stack)
         elif value.type in PRIMITIVE_TYPES:
-            return python.TypeHint(module='builtins', name=PRIMITIVE_TYPES[value.type].__name__)
+            return python.TypeHint.from_type(PRIMITIVE_TYPES[value.type])
         elif value.type == openapi.Type.object:
             return self._process_schema_object(value, stack)
         elif value.type == openapi.Type.array:
@@ -155,6 +178,12 @@ class OpenApi30SchemaConverter:
             return python.TypeHint.from_str('typing:Any')
         else:
             raise NotImplementedError(str(stack))
+
+    def _process_string(self, value: openapi.Schema, _: Stack) -> python.TypeHint:
+        if value.format:
+            if typ := FORMAT_ENCODERS.get((value.type, value.format), None):
+                return python.TypeHint.from_type(typ)
+        return python.TypeHint.from_type(str)
 
     @property
     def schema_modules(self) -> Iterable[python.SchemaModule]:
@@ -171,6 +200,13 @@ class OpenApi30SchemaConverter:
         ]
 
 
+def in_types(typ: python.TypeHint, allowed: Iterable[python.TypeHint]) -> bool:
+    if typ.is_union():
+        return all(in_types(arg, allowed) for arg in typing.cast(python.GenericTypeHint, typ).args)
+
+    return typ in allowed
+
+
 PRIMITIVE_TYPES = {
     openapi.Type.string: str,
     openapi.Type.integer: int,
@@ -178,20 +214,26 @@ PRIMITIVE_TYPES = {
     openapi.Type.boolean: bool,
 }
 
+FORMAT_ENCODERS = {
+    (openapi.Type.string, 'uuid'): uuid.UUID,
+    (openapi.Type.string, 'date'): dt.date,
+    (openapi.Type.string, 'date-time'): dt.datetime,
+    (openapi.Type.string, 'time'): dt.time,
+    (openapi.Type.string, 'decimal'): dec.Decimal,
+}
+
 FIELD_PROPS = {
-    'exclusive_maximum': 'lt',
-    'exclusive_minimum': 'gt',
-    'maximum': 'le',
     'max_items': 'max_length',
     'max_length': 'max_length',
-    'max_properties': 'min_length',
-    'minimum': 'ge',
+    'max_properties': 'man_length',
     'min_items': 'min_length',
     'min_length': 'min_length',
     'min_properties': 'min_length',
     'multiple_of': 'multiple_of',
     'pattern': 'pattern',
 }
+
+NUMERIC_CONSTRAINTS = {'ge', 'gt', 'le', 'lt', 'multiple_of'}
 
 
 def resolve_type_hint(root_package: str, pointer: str | Stack) -> python.TypeHint:
