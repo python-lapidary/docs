@@ -574,9 +574,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#removed" class="md-nav__link">
+  <a href="#changed" class="md-nav__link">
     <span class="md-ellipsis">
-      Removed
+      Changed
     </span>
   </a>
   
@@ -655,7 +655,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#changed" class="md-nav__link">
+  <a href="#changed_1" class="md-nav__link">
     <span class="md-ellipsis">
       Changed
     </span>
@@ -664,7 +664,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#removed_1" class="md-nav__link">
+  <a href="#removed" class="md-nav__link">
     <span class="md-ellipsis">
       Removed
     </span>
@@ -802,7 +802,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#changed_1" class="md-nav__link">
+  <a href="#changed_2" class="md-nav__link">
     <span class="md-ellipsis">
       Changed
     </span>
@@ -849,11 +849,15 @@ and the format of this file is based on <a href="https://keepachangelog.com/en/1
 <h2 id="unreleased"><a href="https://github.com/python-lapidary/lapidary/compare/v0.10.0...HEAD">Unreleased</a></h2>
 <h3 id="added">Added</h3>
 <ul>
-<li>Support bare response body or body and headers as result of operation methods.</li>
+<li>Always return response body and headers (metadata) model as result of operation methods.</li>
+<li>Use pydantic to encode request parameters and decode response headers.</li>
+<li>Response annotation accepts metadata model, which can be used to send headers and or parameters.</li>
 </ul>
-<h3 id="removed">Removed</h3>
+<h3 id="changed">Changed</h3>
 <ul>
-<li>Drop support for response envelopes.</li>
+<li>Serialization styles are now classes.</li>
+<li>Response annotation uses explicit Body argument</li>
+<li>Instead of response models, return values are always a <code>tuple[body, metadata]</code></li>
 </ul>
 <h2 id="0100-2024-06-01"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.10.0">0.10.0</a> - 2024-06-01</h2>
 <h3 id="added_1">Added</h3>
@@ -871,13 +875,13 @@ and the format of this file is based on <a href="https://keepachangelog.com/en/1
 <li>Added a default user-agent header.</li>
 <li>Added support for security scheme combinations.</li>
 </ul>
-<h3 id="changed">Changed</h3>
+<h3 id="changed_1">Changed</h3>
 <ul>
 <li>Changed the programming paradigm from dynamic with scaffolding to declarative via annotations.</li>
 <li>Changed authentication model to NamedAuth.</li>
 <li>Updated required python version to 3.9, following httpx-auth</li>
 </ul>
-<h3 id="removed_1">Removed</h3>
+<h3 id="removed">Removed</h3>
 <ul>
 <li>Removed support for invalid HTTP status codes patterns, like 20X (<a href="https://spec.openapis.org/oas/v3.1.0#patterned-fields-0">OAS3.1 4.8.16.2</a>).</li>
 <li>Removed Absent class #50.</li>
@@ -916,7 +920,7 @@ and the format of this file is based on <a href="https://keepachangelog.com/en/1
 <li>py.typed for mypy</li>
 <li>Support auth object.</li>
 </ul>
-<h3 id="changed_1">Changed</h3>
+<h3 id="changed_2">Changed</h3>
 <ul>
 <li>Migrated project to monorepo</li>
 <li>Unified versioning lapidary-render</li>
