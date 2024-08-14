@@ -530,9 +530,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#lapidary.runtime.HttpErrorResponse" class="md-nav__link">
+    <span class="md-ellipsis">
+      HttpErrorResponse
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lapidary.runtime.LapidaryResponseError" class="md-nav__link">
+    <span class="md-ellipsis">
+      LapidaryResponseError
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#lapidary.runtime.Metadata" class="md-nav__link">
     <span class="md-ellipsis">
       Metadata
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lapidary.runtime.UnexpectedResponse" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnexpectedResponse
     </span>
   </a>
   
@@ -744,9 +771,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#lapidary.runtime.HttpErrorResponse" class="md-nav__link">
+    <span class="md-ellipsis">
+      HttpErrorResponse
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lapidary.runtime.LapidaryResponseError" class="md-nav__link">
+    <span class="md-ellipsis">
+      LapidaryResponseError
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#lapidary.runtime.Metadata" class="md-nav__link">
     <span class="md-ellipsis">
       Metadata
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lapidary.runtime.UnexpectedResponse" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnexpectedResponse
     </span>
   </a>
   
@@ -992,9 +1046,7 @@ Calling with no parameters removes all references</p>
 
               <details class="quote">
                 <summary>Source code in <code>docs/lapidary/src/lapidary/runtime/model/param_serialization.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">196</span>
 <span class="normal">197</span>
 <span class="normal">198</span>
 <span class="normal">199</span>
@@ -1012,7 +1064,9 @@ Calling with no parameters removes all references</p>
 <span class="normal">211</span>
 <span class="normal">212</span>
 <span class="normal">213</span>
-<span class="normal">214</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">FormExplode</span><span class="p">(</span><span class="n">MultimapSerializationStyle</span><span class="p">):</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">FormExplode</span><span class="p">(</span><span class="n">MultimapSerializationStyle</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">serialize_scalar</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ScalarType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Multimap</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SimpleMultimap</span><span class="o">.</span><span class="n">serialize_scalar</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
@@ -1067,10 +1121,10 @@ Calling with no parameters removes all references</p>
 
             <details class="quote">
               <summary>Source code in <code>docs/lapidary/src/lapidary/runtime/model/param_serialization.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">serialize_object</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ObjectType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Multimap</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Disregard name, return a map of {key: value}&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">serialize_scalar</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">item</span><span class="p">)</span>
@@ -1083,6 +1137,101 @@ Calling with no parameters removes all references</p>
 
 
   </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="lapidary.runtime.HttpErrorResponse" class="doc doc-heading">
+            <code>HttpErrorResponse</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="typing_extensions.Generic">Generic</span>[<span title="lapidary.runtime.model.error.Body">Body</span>, <span title="lapidary.runtime.model.error.Headers">Headers</span>]</code>, <code><a class="autorefs autorefs-internal" title="lapidary.runtime.model.error.LapidaryResponseError" href="#lapidary.runtime.LapidaryResponseError">LapidaryResponseError</a></code></p>
+
+
+      <p>Base error class for declared HTTP error responses - 4XX &amp; 5XX.
+Python doesn't fully support parametrized exception types, but extending types can concretize it.</p>
+
+              <details class="quote">
+                <summary>Source code in <code>docs/lapidary/src/lapidary/runtime/model/error.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">HttpErrorResponse</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">Body</span><span class="p">,</span> <span class="n">Headers</span><span class="p">],</span> <span class="n">LapidaryResponseError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base error class for declared HTTP error responses - 4XX &amp; 5XX.</span>
+<span class="sd">    Python doesn&#39;t fully support parametrized exception types, but extending types can concretize it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="n">Headers</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Body</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="n">status_code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="lapidary.runtime.LapidaryResponseError" class="doc doc-heading">
+            <code>LapidaryResponseError</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="lapidary.runtime.model.error.LapidaryError">LapidaryError</span></code></p>
+
+
+      <p>Base class for errors that wrap the response</p>
+
+              <details class="quote">
+                <summary>Source code in <code>docs/lapidary/src/lapidary/runtime/model/error.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">LapidaryResponseError</span><span class="p">(</span><span class="n">LapidaryError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for errors that wrap the response&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
 
     </div>
 
@@ -1113,6 +1262,58 @@ Calling with no parameters removes all references</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotation for models that hold other WebArg fields&quot;&quot;&quot;</span>
 </code></pre></div></td></tr></table></div>
               </details>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="lapidary.runtime.UnexpectedResponse" class="doc doc-heading">
+            <code>UnexpectedResponse</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="lapidary.runtime.model.error.LapidaryResponseError" href="#lapidary.runtime.LapidaryResponseError">LapidaryResponseError</a></code></p>
+
+
+      <p>Base error class for undeclared responses</p>
+
+              <details class="quote">
+                <summary>Source code in <code>docs/lapidary/src/lapidary/runtime/model/error.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">UnexpectedResponse</span><span class="p">(</span><span class="n">LapidaryResponseError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base error class for undeclared responses&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Response</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">response</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
 
     </div>
 
