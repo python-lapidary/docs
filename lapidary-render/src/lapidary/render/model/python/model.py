@@ -5,7 +5,6 @@ from collections.abc import Iterable, Mapping
 from typing import Any, Literal, TypeAlias
 
 from ..openapi import ParameterLocation as ParamLocation
-from ..openapi import Style as ParamStyle
 from .type_hint import NONE, TypeHint, union_of
 
 MimeType: TypeAlias = str
@@ -150,6 +149,13 @@ class OperationFunction:
         return union_of(*types)
 
 
+class ParamStyle(enum.Enum):
+    simple_string = 'SimpleString'
+    simple_multimap = 'SimpleMultimap'
+    form = 'Form'
+    form_explode = 'FormExplode'
+
+
 @dc.dataclass(kw_only=True)
 class MetaField:
     """
@@ -169,14 +175,13 @@ class MetaField:
     Required params are rendered before optional, and optional have default value None
     """
 
-    annotation: Literal['Cookie', 'Header', 'Headers', 'Link', 'Path', 'Query']
+    annotation: Literal['Cookie', 'Header', 'Metadata', 'Link', 'Path', 'Query']
 
     default: Any = None
     """Default value, used only for global headers."""
 
     media_type: str | None = None
     style: ParamStyle | None
-    explode: bool | None
 
     def dependencies(self) -> Iterable[TypeHint]:
         yield self.type
