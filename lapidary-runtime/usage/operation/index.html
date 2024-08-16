@@ -458,9 +458,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mapping-headers" class="md-nav__link">
+  <a href="#mapping-headers-and-response-status-code" class="md-nav__link">
     <span class="md-ellipsis">
-      Mapping headers
+      Mapping headers and response status code
     </span>
   </a>
   
@@ -790,9 +790,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mapping-headers" class="md-nav__link">
+  <a href="#mapping-headers-and-response-status-code" class="md-nav__link">
     <span class="md-ellipsis">
-      Mapping headers
+      Mapping headers and response status code
     </span>
   </a>
   
@@ -870,12 +870,12 @@ example format is https://example.com/path?param=value.</p>
 <pre><code class="language-python">@get('/cats')
 async def list_cats(
         self: Self,
-        color: Annotated[str, Query()],
+        color: Annotated[str, Query],
 ):
     pass
 </code></pre>
 <p>Calling a method like this:</p>
-<pre><code class="language-python">client.list_cats(color='black')
+<pre><code class="language-python">await client.list_cats(color='black')
 </code></pre>
 <p>results in a GET request being sent to the following URL: https://example.com/cats?color=black.</p>
 <p>This illustrates how arguments passed to the method are directly mapped to query parameters in the URL, forming a
@@ -888,29 +888,29 @@ parameter with Path(). Here is an example of how to define and use a path parame
 <pre><code class="language-python">@get('/cat/{cat_id}')
 async def get_cat(
         self: Self,
-        cat_id: Annotated[str, Path()],
+        cat_id: Annotated[str, Path],
 ):
     pass
 </code></pre>
 <p>When you call this method like so:</p>
-<pre><code class="language-python">client.get_cat(cat_id=1)
+<pre><code class="language-python">await client.get_cat(cat_id=1)
 </code></pre>
 <p>it constructs and sends a GET request to https://example.com/cat/1. This demonstrates the method's ability to
 dynamically incorporate the provided argument (cat_id=1) into the request URL as a path parameter.</p>
 <h2 id="headers">Headers</h2>
 <h3 id="non-cookie-headers">Non-cookie headers</h3>
-<p>Header parameters are utilized to add HTTP headers to a request. These can be defined using the Header() annotation in a
+<p>Header parameters are utilized to add HTTP headers to a request. These can be defined using the <code>Header</code> annotation in a
 method declaration, specifying the header name and the expected value type.</p>
 <p>Example:</p>
 <pre><code class="language-python">@get('/cats')
 async def list_cats(
         self: Self,
-    version: Annotated[str, Header('version')],
+        version: Annotated[str, Header],
 ):
     pass
 </code></pre>
 <p>Invoking this method with:</p>
-<pre><code class="language-python">client.list_cats(version='2')
+<pre><code class="language-python">await client.list_cats(version='2')
 </code></pre>
 <p>results in the execution of a GET request that includes the header <code>version: 2</code>.</p>
 <p>Note: The Cookie, Header, Param, and Query annotations all accept parameters such as name, style, and explode as defined
@@ -927,7 +927,7 @@ async def list_cats(
     pass
 </code></pre>
 <p>Calling this method as</p>
-<pre><code class="language-python">client.list_cats(cookie_key='value')
+<pre><code class="language-python">await client.list_cats(cookie_key='value')
 </code></pre>
 <p>will send a GET request that includes the header Cookie: key=value.</p>
 <h2 id="request-body">Request body</h2>
@@ -937,7 +937,7 @@ such parameter.</p>
 <pre><code class="language-python">@POST('/cat')
 async def add_cat(
         self: Self,
-        cat: Annotated[Cat, RequestBody({
+        cat: Annotated[Cat, Body({
             'application/json': Cat,
         })],
 ):
@@ -968,11 +968,11 @@ types. This mechanism allows developers to define how responses are parsed and r
 <p>Example:</p>
 <pre><code class="language-python">@get('/cat')
 async def list_cats(self: Self) -&gt; Annotated[
-    Awaitable[List[Cat]],
+    tuple[List[Cat], None],
     Responses({
-        '2XX': {
+        '2XX': Response(Body({
             'application/json': List[Cat],
-        },
+        })),
     })
 ]:
     pass
@@ -981,41 +981,39 @@ async def list_cats(self: Self) -&gt; Annotated[
 application/json, the response body will be parsed as a list of Cat objects. This explicit declaration ensures that the
 method's return type is tightly coupled with the anticipated successful response structure, providing clarity and type
 safety for API interactions.</p>
-<h3 id="mapping-headers">Mapping headers</h3>
-<p>Lapidary supports an additional response type that envelops the response body and allows declaring response headers.</p>
+<h3 id="mapping-headers-and-response-status-code">Mapping headers and response status code</h3>
+<p>Lapidary operation methods always return a tuple. The first element is the response body, the second is the response metadata (headers and/or status code), each of them being optional.</p>
 <p>Example:</p>
 <pre><code class="language-python">
-class CatsListResponse(ResponseEnvelope):
-   body: Annotated[List[Cat], ResponseBody()]
-   total_count: Annotated[int, ResponseHeader('X-Total-Count')]
+class CatListMeta(ModelBase):
+   total_count: Annotated[int, Header('Total-Count')]
+   status_code: Annotated[int, StatusCode]
+
 
 class CatClient(ClientBase):
    @get('/cat')
    async def list_cats(self: Self) -&gt; Annotated[
-       Awaitable[CatsListResponse],
+       tuple[list[Cat], CatListMeta],
        Responses({
-           '2XX': {
-               'application/json': CatsListResponse,
-           },
+           '2XX': Response(
+                Body({
+                    'application/json': list[Cat],
+                }),
+                CatListMeta
+           ),
        })
    ]:
        pass
 
 client = CatClient()
-cats_response = await client.list_cats()
-assert cats_response.body == [Cat(...)]
-assert cats_response.count == 1
+cats_body, cats_meta = await client.list_cats()
+assert cats_body.body == [Cat(...)]
+assert cats_meta.count == 1
+assert cats_meta.status_code == 200
 </code></pre>
 <h3 id="handling-error-responses">Handling error responses</h3>
-<p>Lapidary allows you to map specific responses to exceptions. This feature is commonly used for error responses, like
-those with non-2XX status codes, but it's not limited to them. Any response specified in the Responses annotation can be
-set to raise an exception if it meets the defined conditions. This gives developers the flexibility to either raise
-exceptions for particular responses or handle them in the standard flow, based on what's needed for the application.</p>
-<pre><code class="language-python">from dataclasses import dataclass
-
-
-@dataclass
-class ErrorModel(Exception):
+<p>Lapidary maps HTTP error responses to exceptions.</p>
+<pre><code class="language-python">class ErrorModel(ModelBase):
     error_code: int
     error_message: str
 
@@ -1024,20 +1022,30 @@ class ErrorModel(Exception):
 async def list_cats(
         self: Self,
 ) -&gt; Annotated[
-    Awaitable[List[Cat]],
+    tuple[List[Cat], None],
     Responses({
-        '2XX': {...},
-        '4XX': {
+        '2XX': Response(...),
+        '4XX': Response(Body({
             'application/json': ErrorModel,
-        }
+        }))
     }),
 ]:
     pass
 </code></pre>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When creating a response model to be raised as an exception, it cannot derive from both pydantic.BaseModel and Exception due to inheritance conflicts. Opt for a straightforward class or a dataclass.</p>
-</div>
+<p>Responses with status code 400 and up will cause <code>HttpErrorResponse</code> to be risen as long as they're declared in the response map.</p>
+<pre><code class="language-python">try:
+    await client.list_cats()
+except HttpErrorResponse as e:
+    assert e.status_code == 400
+    assert e.headers is None
+    assert isinstance(e.body, ErrorModel)
+</code></pre>
+<p>Any responses not declared in the response map, regardless of their status code, raise <code>UnexpectedResponse</code>.</p>
+<pre><code class="language-python">try:
+    await client.list_cats()
+except UnexpectedResponse as e:
+    assert isinstance(e.response, httpx.response)
+</code></pre>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Exception types mapped to responses in the Responses annotation should not be included in the method's return type hint. They are exclusively declared within the Responses framework for appropriate processing.</p>
