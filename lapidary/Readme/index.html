@@ -548,6 +548,23 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage:
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -567,8 +584,35 @@
 <h1 id="lapidary">Lapidary</h1>
 <p><a href="https://github.com/python-lapidary/lapidary/actions/workflows/test_publsh.yaml"><img alt="test" src="https://github.com/python-lapidary/lapidary/actions/workflows/test_publish.yaml/badge.svg" /></a></p>
 <p>Python DSL for Web API clients.</p>
+<p>http://lapidary.dev/</p>
 <p>Also check <a href="https://github.com/python-lapidary/lapidary-render/">lapidary-render</a>,
 a command line program that generates Lapidary clients from OpenAPI.</p>
+<h2 id="usage">Usage:</h2>
+<pre><code class="language-python">class CatClient(ClientBase):
+    &quot;&quot;&quot;This class is a working API client&quot;&quot;&quot;
+
+    def __init__(self):
+        super().__init__(
+            base_url='https://example.com/api',
+        )
+
+    @get('/cat')
+    async def list_cats(self: Self) -&gt; Annotated[
+        tuple[list[Cat], CatListMeta],
+        Responses({
+            '2XX': Response(
+                Body({
+                    'application/json': list[Cat],
+                }),
+                CatListMeta
+            ),
+        })
+    ]:
+       pass
+
+client = CatClient()
+cats_body, cats_meta = await client.list_cats()
+</code></pre>
 
 
 
