@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import abc
 import logging
-from importlib.metadata import version
 
 import httpx
 import typing_extensions as typing
@@ -13,30 +12,26 @@ if typing.TYPE_CHECKING:
     import types
     from collections.abc import Iterable
 
-    from .types_ import NamedAuth, SecurityRequirements
+    from .types_ import ClientArgs, NamedAuth, SecurityRequirements
 
 logger = logging.getLogger(__name__)
-
-USER_AGENT = f'lapidary.dev/{version("lapidary")}'
 
 
 class ClientBase(abc.ABC):
     def __init__(
         self,
-        base_url: str,
-        user_agent: str = USER_AGENT,
+        user_agent: str | None = None,
         security: Iterable[SecurityRequirements] | None = None,
-        _http_client: httpx.AsyncClient | None = None,
-        **httpx_kwargs,
+        **httpx_kwargs: typing.Unpack[ClientArgs],
     ):
-        if httpx_kwargs and _http_client:
-            raise TypeError(f'Extra keyword arguments not accepted when passing _http_client: {", ".join(httpx_kwargs.keys())}')
-
         headers = httpx.Headers(httpx_kwargs.pop('headers', None))
-        if user_agent:
-            headers['User-Agent'] = user_agent
+        if user_agent is None:
+            from importlib.metadata import version
 
-        self._client = _http_client or httpx.AsyncClient(base_url=base_url, headers=headers, **httpx_kwargs)
+            user_agent = f'lapidary.dev/#{version("lapidary")}'
+        headers['User-Agent'] = user_agent
+
+        self._client = httpx.AsyncClient(headers=headers, **httpx_kwargs)
         self._auth_registry = AuthRegistry(security)
 
     async def __aenter__(self: typing.Self) -> typing.Self:
