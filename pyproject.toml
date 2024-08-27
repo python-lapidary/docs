@@ -10,9 +10,9 @@ readme = "Readme.md"
 [tool.poetry.dependencies]
 python = '^3.10'
 mkdocs = "^1.6.0"
-mkdocs-material = "^9.5.25"
+mkdocs-material = "^9.5"
 mkdocs-monorepo-plugin = "^1.1.0"
-mkdocstrings = {extras = ["python"], version = "^0.25.1"}
+mkdocstrings = {extras = ["python"], version = "^0.25"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
