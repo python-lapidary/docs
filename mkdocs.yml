@@ -5,8 +5,8 @@ repo_url: https://github.com/python-lapidary/lapidary
 
 nav:
 - index.md
-- Lapidary runtime: '!include docs/lapidary/config/mkdocs.yml'
-- Lapidary render: '!include docs/lapidary-render/config/mkdocs.yml'
+- Lapidary runtime: '!include docs/lapidary/.config/mkdocs.yml'
+- Lapidary render: '!include docs/lapidary-render/.config/mkdocs.yml'
 plugins:
 - monorepo
 - mkdocstrings:
