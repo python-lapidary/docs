@@ -664,7 +664,7 @@ plugins = [
 ]
 </code></pre>
 <p><code>JSONPatchPlugin</code> will load all yaml and json files in <code>/src/patches</code> directory and apply them as JSONPatch to the OAD.</p>
-<p>The</p>
+<p>First let's fix the parameter type.</p>
 <pre><code class="language-yaml"># src/patches/my_operation.yaml
 - op: replace
   path: /paths/~1my_operation/get/parameters/0/schema
@@ -674,7 +674,7 @@ plugins = [
       type: string
       format: uuid
 </code></pre>
-<p>The server expects <code>?id__in=uuid1,uuid2</code> which happens to fit style <code>form, no-explode</code>. <code>form, explode</code> is the default for <code>query</code>...</p>
+<p>Second we'll fix the serialization style. The server expects <code>?id__in=uuid1,uuid2</code> which happens to fit style <code>form, no-explode</code>. <code>form, explode</code> is the default for <code>query</code>...</p>
 <pre><code class="language-yaml">- op: add
   path: /paths/~1my_operation/get/parameters/0/explode
   value: false
