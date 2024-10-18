@@ -594,6 +594,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixed
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -667,7 +676,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fixed" class="md-nav__link">
+  <a href="#fixed_1" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -742,7 +751,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed_1" class="md-nav__link">
+  <a href="#fixed_2" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -766,7 +775,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fixed_2" class="md-nav__link">
+  <a href="#fixed_3" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -790,7 +799,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fixed_3" class="md-nav__link">
+  <a href="#fixed_4" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -814,7 +823,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fixed_4" class="md-nav__link">
+  <a href="#fixed_5" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -856,7 +865,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed_5" class="md-nav__link">
+  <a href="#fixed_6" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -895,7 +904,11 @@ and the format of this file is based on <a href="https://keepachangelog.com/en/1
 <h3 id="added">Added</h3>
 <ul>
 <li>Accept session_factory in <code>ClientBase.__init__</code>.</li>
-<li>Python 3.13 is not supported (after upgrading mimeparse to 2.0.0rc1).</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>Handling collections in request bodies.</li>
+<li>Dropped dependency on std package cgi, which allows running under python 3.13 .</li>
 </ul>
 <h2 id="0110-2024-08-13"><a href="https://github.com/python-lapidary/lapidary/compare/v0.10.0...v0.11.0">0.11.0</a> - 2024-08-13</h2>
 <h3 id="added_1">Added</h3>
@@ -917,7 +930,7 @@ and the format of this file is based on <a href="https://keepachangelog.com/en/1
 <li>Support response envelope objects to allow returning headers together with the body model.</li>
 </ul>
 <h2 id="091-2024-05-25"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.9.1">0.9.1</a> - 2024-05-25</h2>
-<h3 id="fixed">Fixed</h3>
+<h3 id="fixed_1">Fixed</h3>
 <ul>
 <li>Moved pytest-asyncio dependency to dev group.</li>
 </ul>
@@ -944,24 +957,24 @@ and the format of this file is based on <a href="https://keepachangelog.com/en/1
 <li>Support for arbitrary specification extensions (x- properties).</li>
 <li>Support iterator result and paging plugin.</li>
 </ul>
-<h3 id="fixed_1">Fixed</h3>
+<h3 id="fixed_2">Fixed</h3>
 <ul>
 <li>Property cross-validation (e.g. only one property of example and examples is allowed).</li>
 <li>Bearer security scheme.</li>
 </ul>
 <h2 id="073-2022-12-15"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.7.3">0.7.3</a> - 2022-12-15</h2>
-<h3 id="fixed_2">Fixed</h3>
+<h3 id="fixed_3">Fixed</h3>
 <ul>
 <li>None error on missing x-lapidary-responses-global</li>
 <li>Enum params are rendered as their string representation instead of value.</li>
 </ul>
 <h2 id="072-2022-12-15"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.7.2">0.7.2</a> - 2022-12-15</h2>
-<h3 id="fixed_3">Fixed</h3>
+<h3 id="fixed_4">Fixed</h3>
 <ul>
 <li>platformdirs dependency missing from pyproject.</li>
 </ul>
 <h2 id="071-2022-12-15"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.7.1">0.7.1</a> - 2022-12-15</h2>
-<h3 id="fixed_4">Fixed</h3>
+<h3 id="fixed_5">Fixed</h3>
 <ul>
 <li>Error while constructing a type.</li>
 </ul>
@@ -978,7 +991,7 @@ and the format of this file is based on <a href="https://keepachangelog.com/en/1
 <li>Unified versioning lapidary-render</li>
 <li>Changed some models to better suite a dynamic library.</li>
 </ul>
-<h3 id="fixed_5">Fixed</h3>
+<h3 id="fixed_6">Fixed</h3>
 <ul>
 <li>Dynamically creating generic types</li>
 </ul>
