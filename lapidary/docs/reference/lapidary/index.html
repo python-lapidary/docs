@@ -677,6 +677,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#lapidary.runtime.iter_pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      iter_pages
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1180,6 +1189,195 @@ Python doesn't fully support parametrized exception types, but extending types c
 
 </div>
 
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="lapidary.runtime.iter_pages" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">iter_pages</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">cursor_param_name</span><span class="p">,</span> <span class="n">get_cursor</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+      <p>Create a function that returns an async iterator over pages from the async operation function :param:<code>fn</code>.</p>
+<p>The returned function can be called with the same parameters as :param:<code>fn</code> (except for the cursor parameter),
+and returns an async iterator that yields results from :param:<code>fn</code>, handling pagination automatically.</p>
+<p>The function :param:<code>fn</code> will be called initially without the cursor parameter and then called with the cursor parameter
+as long as :param:<code>get_cursor</code> can extract a cursor from the result.</p>
+<p><strong>Example:</strong></p>
+<p>.. code:: python</p>
+<pre><code>async for page in iter_pages(client.fn, 'cursor', extractor_fn)(parameter=value):
+    # Process page
+</code></pre>
+<p>Typically, an API will use the same paging pattern for all operations supporting it, so it's a good idea to write a shortcut function:</p>
+<p>.. code:: python</p>
+<pre><code>from lapidary.runtime import iter_pages as _iter_pages
+
+def iter_pages[P, R](fn: Callable[P, Awaitable[R]]) -&gt; Callable[P, AsyncIterable[R]]:
+    return _iter_pages(fn, 'cursor', lambda result: ...)
+</code></pre>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>fn</code></td>
+            <td>
+                  <code><span title="collections.abc.Callable">Callable</span>[<span title="lapidary.runtime.paging.P">P</span>, <span title="collections.abc.Awaitable">Awaitable</span>[<span title="lapidary.runtime.paging.R">R</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An async function that retrieves a page of data.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>cursor_param_name</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name of the cursor parameter in :param:<code>fn</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>get_cursor</code></td>
+            <td>
+                  <code><span title="collections.abc.Callable">Callable</span>[[<span title="lapidary.runtime.paging.R">R</span>], <span title="typing.Optional">Optional</span>[<span title="lapidary.runtime.paging.C">C</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function that extracts a cursor value from the result of :param:<code>fn</code>. Return <code>None</code> to end the iteration.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>docs/lapidary/src/lapidary/runtime/paging.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">iter_pages</span><span class="p">(</span>
+    <span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">R</span><span class="p">]],</span>
+    <span class="n">cursor_param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">get_cursor</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">R</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">C</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">AsyncIterable</span><span class="p">[</span><span class="n">R</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a function that returns an async iterator over pages from the async operation function :param:`fn`.</span>
+
+<span class="sd">    The returned function can be called with the same parameters as :param:`fn` (except for the cursor parameter),</span>
+<span class="sd">    and returns an async iterator that yields results from :param:`fn`, handling pagination automatically.</span>
+
+<span class="sd">    The function :param:`fn` will be called initially without the cursor parameter and then called with the cursor parameter</span>
+<span class="sd">    as long as :param:`get_cursor` can extract a cursor from the result.</span>
+
+<span class="sd">    **Example:**</span>
+
+<span class="sd">    .. code:: python</span>
+
+<span class="sd">        async for page in iter_pages(client.fn, &#39;cursor&#39;, extractor_fn)(parameter=value):</span>
+<span class="sd">            # Process page</span>
+
+<span class="sd">    Typically, an API will use the same paging pattern for all operations supporting it, so it&#39;s a good idea to write a shortcut function:</span>
+
+<span class="sd">    .. code:: python</span>
+
+<span class="sd">        from lapidary.runtime import iter_pages as _iter_pages</span>
+
+<span class="sd">        def iter_pages[P, R](fn: Callable[P, Awaitable[R]]) -&gt; Callable[P, AsyncIterable[R]]:</span>
+<span class="sd">            return _iter_pages(fn, &#39;cursor&#39;, lambda result: ...)</span>
+
+<span class="sd">    :param fn: An async function that retrieves a page of data.</span>
+<span class="sd">    :param cursor_param_name: The name of the cursor parameter in :param:`fn`.</span>
+<span class="sd">    :param get_cursor: A function that extracts a cursor value from the result of :param:`fn`. Return `None` to end the iteration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterable</span><span class="p">[</span><span class="n">R</span><span class="p">]:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[call-arg]</span>
+        <span class="k">yield</span> <span class="n">result</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">get_cursor</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="n">cursor</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">cursor_param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cursor</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[call-arg]</span>
+            <span class="k">yield</span> <span class="n">result</span>
+
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">get_cursor</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
 
 
 
