@@ -569,6 +569,32 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how" class="md-nav__link">
+    <span class="md-ellipsis">
+      How
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -588,6 +614,11 @@
 <h1 id="lapidary-render">Lapidary render</h1>
 <p><a href="https://github.com/python-lapidary/lapidary-render/actions/workflows/test.yml"><img alt=".github/workflows/test.yml" src="https://github.com/python-lapidary/lapidary-render/actions/workflows/test.yml/badge.svg" /></a></p>
 <p>Lapidary-render is a program that generates Python Web API clients from OpenAPI documents.</p>
+<h2 id="why">Why</h2>
+<p>OpenAPI is a machine readable description of Web APIs. A large subset of it is very well suited for automatic translation to a client code.</p>
+<h2 id="how">How</h2>
+<p>Lapidary render uses <a href="https://jinja.palletsprojects.com/">Jinja</a> to generate client code, but most of the translation from OpenAPI to python is implemented in python itself. This makes it easier to read and maintain the generator itself.</p>
+<p>Instead of generating large pieces of code that convert data and call http libraries, Lapidary generates code that uses <a href="https://github.com/python-lapidary/lapidary">Lapidary runtime library</a>. It's also a way to greatly simplify the code, at the expense of small runtime overhead related to processing method signatures.</p>
 
 
 
