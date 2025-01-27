@@ -532,7 +532,28 @@
         
   
   <span class="md-ellipsis">
-    OpenAPI compatibility
+    OpenAPI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../json-schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JSON Schema
   </span>
   
 
@@ -672,7 +693,12 @@
 </li>
 <li class="task-list-item">
 <p><input type="checkbox" disabled checked/> The generator code should be simple.</p>
-<p>Lapidary-render does most of the processing in Python, only leaving the rendering to Jinja templates.</p>
+<p>Generator processes data in three stages</p>
+<ol>
+<li>Enhance and transform OpenAPI to a structure more close resembling python model structure</li>
+<li>Convert the enhanced OpenAPI to a metamodel</li>
+<li>Convert the metamodel to a syntax tree</li>
+</ol>
 </li>
 <li class="task-list-item">
 <p><input type="checkbox" disabled checked/> Client code should be simple.</p>
@@ -706,7 +732,7 @@
 <p>origin
 : URL of the OpenAPI document, used when document_path is missing, or when <code>servers</code> is not defined, or the first server URL is a relative path.</p>
 <p>extra_sources
-: list of additional source roots for manually written code. The files will be interpreted as templates, but non-template files will also work.</p>
+: list of additional source roots for manually written python files.</p>
 <p>plugins
 : list of plugin classes. See <a href="/plugins">the section on plug-ins</a></p>
 <p>At least one of <code>document_path</code> and <code>origin</code> is required. Saving OpenAPI document in the project is recommended for repeatable builds.</p>
