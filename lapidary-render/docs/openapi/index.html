@@ -18,7 +18,7 @@
     
     
       
-        <title>OpenAPI compatibility - Lapidary</title>
+        <title>OpenAPI - Lapidary</title>
       
     
     
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#openapi-compatibility" class="md-skip">
+        <a href="#openapi" class="md-skip">
           Skip to content
         </a>
       
@@ -105,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OpenAPI compatibility
+              OpenAPI
             
           </span>
         </div>
@@ -532,7 +532,28 @@
         
   
   <span class="md-ellipsis">
-    OpenAPI compatibility
+    OpenAPI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../json-schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JSON Schema
   </span>
   
 
@@ -585,7 +606,8 @@
   
 
 
-<h1 id="openapi-compatibility">OpenAPI compatibility</h1>
+<h1 id="openapi">OpenAPI</h1>
+<p>OpenAPI compatibility</p>
 <ul>
 <li>✅ <code>openapi</code>: validated (3.0.* accepted)</li>
 <li><code>info</code><ul>
@@ -627,7 +649,7 @@
 <li>🔍 <code>enum</code>: ignored; might be implemented for simple types as <code>Literal</code></li>
 <li>📄 <code>description</code>: planned as part of docstr</li>
 <li>✅ <code>default</code>: if present, the property type turned to <code>Union[None, $type]</code> and has default value <code>None</code><ul>
-<li>🔍 caveat: default values are not to be sent between Web API client and server, instead they are implied be the receiving side. Lapidary could potentially fill such values in response models, but it might be expensive, so it would be an optional feature.</li>
+<li>🔍 caveat: default values are not to be sent between Web API client and server, instead they are implied by the receiving side. Lapidary could potentially implement generating default values for some cases but they don't necessary need to validate against the schema.</li>
 </ul>
 </li>
 <li>✅ <code>nullable</code>: if true, the property type is turned to <code>Union[None, $type]</code></li>
@@ -666,7 +688,9 @@
 <li>❌ <code>callbacks</code>: not planned</li>
 </ul>
 </li>
-<li><code>paths</code><ul>
+<li><code>paths</code>: 🗓️ planned as keys in a TypedDict<ul>
+<li>operations: ✅ mapped to operation methods<ul>
+<li><code>operationId</code>: ✅ used as method name</li>
 <li>🗓️ <code>summary</code>, <code>description</code>: planned as parts of docstr</li>
 <li>❌ <code>servers</code>: ignored</li>
 <li><code>parameters</code><ul>
@@ -681,6 +705,8 @@
 <li>✅ <code>schema</code>: implemented</li>
 <li>🔍 <code>example</code> &amp; examples: considered</li>
 <li>🔧 <code>x-lapidary-name</code>: name of a parameter in the python</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
