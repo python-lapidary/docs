@@ -576,9 +576,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#removed" class="md-nav__link">
+  <a href="#added" class="md-nav__link">
     <span class="md-ellipsis">
-      Removed
+      Added
     </span>
   </a>
   
@@ -594,13 +594,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#0111-2024-08-15" class="md-nav__link">
+  <a href="#removed" class="md-nav__link">
     <span class="md-ellipsis">
-      [0.11.1] - 2024-08-15
+      Removed
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="[0.11.1] - 2024-08-15">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0111-2024-08-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      0.11.1 - 2024-08-15
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="0.11.1 - 2024-08-15">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -629,15 +638,15 @@
         <li class="md-nav__item">
   <a href="#0110-2024-08-14" class="md-nav__link">
     <span class="md-ellipsis">
-      [0.11.0] - 2024-08-14
+      0.11.0 - 2024-08-14
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="[0.11.0] - 2024-08-14">
+    <nav class="md-nav" aria-label="0.11.0 - 2024-08-14">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added" class="md-nav__link">
+  <a href="#added_1" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -703,7 +712,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_1" class="md-nav__link">
+  <a href="#added_2" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -745,7 +754,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_2" class="md-nav__link">
+  <a href="#added_3" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -787,7 +796,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_3" class="md-nav__link">
+  <a href="#added_4" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -844,7 +853,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_4" class="md-nav__link">
+  <a href="#added_5" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -967,7 +976,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_5" class="md-nav__link">
+  <a href="#added_6" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -1009,7 +1018,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_6" class="md-nav__link">
+  <a href="#added_7" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -1099,7 +1108,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_7" class="md-nav__link">
+  <a href="#added_8" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -1165,7 +1174,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_8" class="md-nav__link">
+  <a href="#added_9" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -1200,16 +1209,23 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<p><a href="https://github.com/python-lapidary/lapidary-render/compare/v0.11.1...HEAD">Unreleased</a></p>
-<h3 id="removed">Removed</h3>
+<p><a href="https://github.com/python-lapidary/lapidary-render/compare/v0.12.0...HEAD">Unreleased</a></p>
+<p><a href="https://github.com/python-lapidary/lapidary-render/compare/v0.11.1...v0.12.0">0.12.0</a> - 2025-03-01</p>
+<h3 id="added">Added</h3>
 <ul>
-<li>Support for JSONPatch</li>
+<li>Create .gitignore during <code>init</code>.</li>
+<li>Added support for anyOf, allOf and partial support for oneOf (treated as anyOf).</li>
 </ul>
 <h3 id="changed">Changed</h3>
 <ul>
-<li>Breaking: openapi directory is now <code>${source root}/openapi</code></li>
+<li>Default openapi directory is now <code>${source root}/lapidary/openapi</code>.</li>
 </ul>
-<h2 id="0111-2024-08-15">[0.11.1] - 2024-08-15</h2>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>Removed development dependency on lapidary-render from generated projects</li>
+<li>Removed support for JSON Patch.</li>
+</ul>
+<h2 id="0111-2024-08-15"><a href="https://github.com/python-lapidary/lapidary-render/compare/v0.11.0...v0.11.1">0.11.1</a> - 2024-08-15</h2>
 <h3 id="removed_1">Removed</h3>
 <ul>
 <li>Removed support for generating exceptions</li>
@@ -1219,8 +1235,8 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Don't include body models of error responses in return types of operation methods</li>
 <li>Update <code>Metadata</code> annotation name from <code>Headers</code></li>
 </ul>
-<h2 id="0110-2024-08-14">[0.11.0] - 2024-08-14</h2>
-<h3 id="added">Added</h3>
+<h2 id="0110-2024-08-14"><a href="https://github.com/python-lapidary/lapidary-render/compare/v0.10.1...v0.11.0">0.11.0</a> - 2024-08-14</h2>
+<h3 id="added_1">Added</h3>
 <ul>
 <li>Wrap request headers (and cookies) in a model class</li>
 </ul>
@@ -1242,7 +1258,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Use the up-to-date version of lapidary when initializing projects.</li>
 </ul>
 <h2 id="0100-2034-06-29"><a href="https://github.com/python-lapidary/lapidary-render/compare/v0.9.0...v0.10.0">0.10.0</a> - 2034-06-29</h2>
-<h3 id="added_1">Added</h3>
+<h3 id="added_2">Added</h3>
 <ul>
 <li>HTTP security schemas supported by httpx;</li>
 <li>OAuth2 flows supported by httpx_auth;</li>
@@ -1260,7 +1276,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>broken --cache option;</li>
 </ul>
 <h2 id="090-2024-05-17"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.9.0">0.9.0</a> - 2024-05-17</h2>
-<h3 id="added_2">Added</h3>
+<h3 id="added_3">Added</h3>
 <ul>
 <li>Support for OAuth2 password flow.</li>
 </ul>
@@ -1275,7 +1291,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Temporary removed support for paging.</li>
 </ul>
 <h2 id="080-2023-01-02"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.8.0">0.8.0</a> - 2023-01-02</h2>
-<h3 id="added_3">Added</h3>
+<h3 id="added_4">Added</h3>
 <ul>
 <li>Support for returning array result as an async iterator.</li>
 <li>Support for paging (requires a dedicated plugin).</li>
@@ -1294,7 +1310,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Missing imports for request body types.</li>
 </ul>
 <h2 id="071-2022-12-15"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.7.1">0.7.1</a> - 2022-12-15</h2>
-<h3 id="added_4">Added</h3>
+<h3 id="added_5">Added</h3>
 <ul>
 <li>Support for (global) api responses.</li>
 <li>Warning header to templates.</li>
@@ -1338,7 +1354,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>issubclass for some typing.* types</li>
 </ul>
 <h2 id="050-2022-10-03"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.5.0">0.5.0</a> - 2022-10-03</h2>
-<h3 id="added_5">Added</h3>
+<h3 id="added_6">Added</h3>
 <ul>
 <li>limited support for allOf schemas</li>
 <li>optional explicit names for enum values</li>
@@ -1356,7 +1372,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>inclusive/exclusive minimum mixed</li>
 </ul>
 <h2 id="040-2022-09-29"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.4.0">0.4.0</a> - 2022-09-29</h2>
-<h3 id="added_6">Added</h3>
+<h3 id="added_7">Added</h3>
 <ul>
 <li>Added subcommands <code>update</code> and <code>init</code>, <code>update</code> reads configuration from pyproject.toml .</li>
 <li>ApiClient accepts base URL, the first server declared in schema is used as the default.</li>
@@ -1389,7 +1405,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Support Python 3.9</li>
 </ul>
 <h2 id="020-2022-09-18"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.2.0">0.2.0</a> - 2022-09-18</h2>
-<h3 id="added_7">Added</h3>
+<h3 id="added_8">Added</h3>
 <ul>
 <li>Support simple oneOf schemas</li>
 <li>Support errata, a JSON Patch for the specification</li>
@@ -1410,7 +1426,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <li>Renamed project due to a name conflict in PyPY</li>
 </ul>
 <h2 id="010-2022-09-14"><a href="https://github.com/python-lapidary/lapidary/releases/tag/v0.1.0">0.1.0</a> - 2022-09-14</h2>
-<h3 id="added_8">Added</h3>
+<h3 id="added_9">Added</h3>
 <ul>
 <li>Generate classes for schemas under components/schemas</li>
 <li>Generate partial client class with methods based on /paths/<em>/</em></li>

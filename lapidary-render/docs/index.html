@@ -644,6 +644,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#extra-python-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extra python files
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -701,7 +710,7 @@
 <h3 id="lapidary-render_1"><code>lapidary render</code></h3>
 <p><code>lapidary render [PROJECT_ROOT]</code></p>
 <p>Renders the client code in the project root. The default project root is the current directory.</p>
-<p>All python files are generated in the <code>PROJECT_ROOT/gen</code> directory.</p>
+<p>All python files are generated in the <code>PROJECT_ROOT/src</code> directory.</p>
 <h2 id="configuration">Configuration</h2>
 <p>Lapidary can be configured with a <code>pyproject.yaml</code> file of the client project, under <code>[tool.lapidary]</code> key.</p>
 <p>package
@@ -710,9 +719,9 @@
 : path of the OpenAPI document, relative to the project root.</p>
 <p>origin
 : URL of the OpenAPI document, used when document_path is missing, or when <code>servers</code> is not defined, or the first server URL is a relative path.</p>
-<p>extra_sources
-: list of additional source roots for manually written python files.</p>
 <p>At least one of <code>document_path</code> and <code>origin</code> is required. Saving OpenAPI document in the project is recommended for repeatable builds.</p>
+<h2 id="extra-python-files">Extra python files</h2>
+<p>Any additional python files can be put in a sub-package <code>extras</code> (${project_root}/src/${package}/extras).</p>
 
 
 
