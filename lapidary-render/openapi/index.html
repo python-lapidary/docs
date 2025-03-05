@@ -622,37 +622,33 @@
 <li>✅ <code>schemas</code>:<ul>
 <li>🗓️ <code>title</code>: planned as part of class docstr</li>
 <li><code>type</code><ul>
-<li>🗓️ [no value]: planned as primitive JSON-compatible object.</li>
-<li>✅ <code>object</code>: implemented as pydantic models</li>
+<li>✅ [no value]: implemented as <code>pydantic.JsonValue</code></li>
+<li>⚠️ caveat: it which includes <code>None</code></li>
+<li>✅ <code>object</code>: implemented as pydantic model</li>
 <li>✅ <code>array</code>: implemented as list</li>
 <li>✅ <code>string</code>, <code>integer</code>, <code>number</code>, <code>boolean</code>: implemented as <code>str</code>, <code>int</code>, <code>float</code> and <code>bool</code></li>
 </ul>
 </li>
-<li>🗓️ <code>format</code>: planned, including custom formats</li>
-<li>✅ assertion keywords: as supported by pydantic</li>
-<li>⚠️ <code>allOf</code>: needs improvement</li>
+<li>⚠️ <code>format</code>: Implemented for string types: <code>uuid</code>, <code>date</code>, <code>date-time</code>, <code>time</code> and <code>decimal</code></li>
+<li>✅ assertion keywords: as supported by <a href="https://github.com/annotated-types/annotated-types">annotated-types</a></li>
+<li>✅ <code>allOf</code>: implemented</li>
 <li>✅ <code>anyOf</code>: implemented as union</li>
 <li>⚠️ <code>oneOf</code>: treated as <code>anyOf</code> and implemented as <code>Union</code></li>
-<li>🗓️ <code>not</code>: planned for objects</li>
+<li>🗓️ <code>not</code>: planned</li>
 <li>✅ <code>required</code>: non-required properties are turned to <code>Union[None, $type]</code></li>
-<li><code>additionalProperties</code>:<ul>
+<li><code>additionalProperties</code>:</li>
 <li>✅ boolean: supported as pydantic <code>extra: 'allow'</code> or <code>'forbid'</code></li>
-<li>🗓️ schema: planned as a <code>Mapping</code> field</li>
-</ul>
-</li>
-<li>🗓️ <code>patternProperties</code>: planned as <code>Mapping</code> field</li>
+<li>🗓️ schema: planned as either a <code>Mapping</code> type or a <code>__pydantic_extra__</code> field</li>
 <li>🔍 <code>enum</code>: ignored; might be implemented for simple types as <code>Literal</code></li>
 <li>📄 <code>description</code>: planned as part of docstr</li>
-<li>✅ <code>default</code>: if present, the property type turned to <code>Union[None, $type]</code> and has default value <code>None</code><ul>
+<li>✅ <code>default</code>: if present, the property type turned to <code>Union[None, $type]</code> and has default value <code>None</code></li>
 <li>🔍 caveat: default values are not to be sent between Web API client and server, instead they are implied by the receiving side. Lapidary could potentially implement generating default values for some cases but they don't necessary need to validate against the schema.</li>
-</ul>
-</li>
 <li>✅ <code>nullable</code>: if true, the property type is turned to <code>Union[None, $type]</code></li>
 <li>✅ <code>readOnly</code> &amp; <code>writeOnly</code>: if either is true, the property type is turned to <code>Union[None, $type]</code> and has default value <code>None</code>; planned as part of docstr<ul>
 <li>⚠️ caveat: readOnly properties are only to be sent to API server, and writeOnly only to be received by the client. A property might be both required one way, and invalid the other way, which could not be directly represented in Python, except with two or three classes for every schema.</li>
 </ul>
 </li>
-<li>❌ <code>discriminator</code>: ignored</li>
+<li>📄 <code>discriminator</code>: planed for use with pydantic discriminated unions</li>
 <li>🔍 <code>example</code>: might be used as part of docstr</li>
 <li>🗓️ <code>externalDocs</code>: planned as part of docstr</li>
 <li>🗓️ <code>deprecated</code>: planned</li>
@@ -680,7 +676,7 @@
 </ul>
 </li>
 <li>🗓️ <code>links</code>: planned</li>
-<li>❌ <code>callbacks</code>: not planned</li>
+<li>🗓️ <code>callbacks</code>: only planning to generate models from referenced schemas</li>
 </ul>
 </li>
 <li><code>paths</code>: 🗓️ planned as keys in a TypedDict<ul>
@@ -698,16 +694,13 @@
 <li>⚠️ <code>style</code>: partially implemented</li>
 <li>🗓️ <code>allowReserved</code>: planned</li>
 <li>✅ <code>schema</code>: implemented</li>
-<li>🔍 <code>example</code> &amp; examples: considered</li>
-<li>🔧 <code>x-lapidary-name</code>: name of a parameter in the python</li>
+<li>🔍 <code>example</code> &amp; <code>examples</code>: considered</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>🔧 <code>x-lapidary-responses-global</code>: responses that might come from any operation</li>
-<li>🔧 <code>x-lapidary-headers-global</code>: headers accepted by any operation</li>
 </ul>
 
 

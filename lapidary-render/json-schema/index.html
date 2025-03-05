@@ -624,6 +624,9 @@ Another goal is to keep models as backwards compatible as much as possible, when
 <pre><code>dict | list | float | int | str | bool
 </code></pre>
 </li>
+<li>
+<p>pydantic provides type <code>JsonValue</code> type that reflects the type of any JSON data, except it also includes None for compatibility with JSON Schema.</p>
+</li>
 </ol>
 <h2 id="type-specific-constraints">Type-specific constraints</h2>
 <p>Most of the constraints are type-specific (they apply only to values of a single type).</p>
@@ -681,7 +684,8 @@ nullable: true
 <p>If <code>enum</code> is in <code>anyOf</code> sub-schemas, the values are summed as sets.</p>
 </li>
 <li>
-<p>If <code>enum</code> is in <code>oneOf</code> sub-schemas, only the values that occur once can be validated.</p>
+<p>If <code>enum</code> is in <code>oneOf</code> sub-schemas, only the values that occur once can be validated
+    (not implemented, since Lapidary treats as just another anyOf).</p>
 </li>
 </ol>
 <h2 id="enum-as-literal"><code>enum</code> as <code>Literal</code></h2>
@@ -782,8 +786,8 @@ anyOf:
 </code></pre>
 <p>=&gt;</p>
 <pre><code>Union[
-    Annotated[int, Field(ge=10)],
-    Annotated[int, Field(le=20)],
+    Annotated[int, Field(le=10)],
+    Annotated[int, Field(ge=20)],
 ]
 </code></pre>
 </li>
@@ -1414,6 +1418,56 @@ class Alice(ModelBase):
 </code></pre>
 <pre><code class="language-python">class Alice:
     prop1: Annotated[int, Le(20)]
+</code></pre>
+<h1 id="generic-types">Generic types</h1>
+<ol>
+<li>JSON Schema only supports generic arrays and maps:</li>
+</ol>
+<pre><code class="language-yaml">sequence:
+  type: array
+  items:
+    type: string
+map:
+  type: object
+  additionalProperties:
+    type: number
+</code></pre>
+<p>=&gt;</p>
+<pre><code class="language-python">sequence: list[str]
+map: dict[float]
+</code></pre>
+<p>There's no way of directly representing a generic python class:</p>
+<pre><code class="language-python">class Envelope[T]:
+    id: uuid.UUID
+    payload: T
+
+
+class Customer:
+    ...
+
+
+data: Envelope[Customer]
+</code></pre>
+<p>can only be represented as concretised schemas:</p>
+<pre><code class="language-yaml">
+Customer:
+   type: object
+
+Envelope:
+   type: object
+   properties:
+      id:
+         type: string
+         format: uuid
+      payload:
+         type: object
+
+CustomerEnvelope:
+   allOf:
+   - $ref: '#/schemas/Envelope'
+   - properties:
+        payload:
+           $ref: '#/schemas/Customer'
 </code></pre>
 <h1 id="references">References</h1>
 <ol>
