@@ -1,6 +1,6 @@
 site_name: Lapidary
 site_description: Build Web API clients with python annotations
-copyright: © 2024 Rafał Krupiński
+copyright: © 2024-2025 Rafał Krupiński
 repo_url: https://github.com/python-lapidary/lapidary
 
 nav:
