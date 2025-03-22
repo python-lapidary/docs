@@ -10,10 +10,10 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = '^3.10'
-mkdocs = "^1.6.0"
-mkdocs-material = "^9.5"
-mkdocs-monorepo-plugin = "^1.1.0"
-mkdocstrings = {extras = ["python"], version = "^0.26.1"}
+mkdocs = "^1"
+mkdocs-material = "^9"
+mkdocs-monorepo-plugin = "^1"
+mkdocstrings = {extras = ["python"], version = "^0.29"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
