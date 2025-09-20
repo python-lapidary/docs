@@ -33,7 +33,7 @@ packages = [{ include = "lapidary", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.13"
-asyncclick = "^8"
+click = "^8"
 httpx = "^0.28"
 libcst = "^1.5"
 openapi-pydantic = "^0.5"
@@ -45,7 +45,6 @@ tomli-w = "^1"
 
 [project.urls]
 Homepage = "https://lapidary.dev/"
-Repository = "https://github.com/python-lapidary/lapidary-render"
 
 [project.scripts]
 lapidary = "lapidary.render:app"
