@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/logo.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
     
     
       
@@ -742,16 +742,17 @@ operation-level declarations override global settings.</p>
 authentication, as specified by its security requirements. This process involves matching the provided authentication
 against the declared requirements before proceeding with the request. To meet these requirements, the user must have
 previously configured the necessary Auth instances using lapidary_authenticate.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">lapidary.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lapidary.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">lapidary.runtime.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">HeaderApiKey</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">Annotated</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyClient</span><span class="p">(</span><span class="n">ClientBase</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">base_url</span><span class="o">=...</span><span class="p">,</span>
-            <span class="n">security</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;apiKeyAuth&#39;</span><span class="p">:</span> <span class="p">[]}],</span>
+            <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
+            <span class="n">base_url</span><span class="o">=</span><span class="s1">&#39;https://example.com/&#39;</span>
         <span class="p">)</span>
 
     <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/api/operation&#39;</span><span class="p">,</span> <span class="n">security</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;admin_only&#39;</span><span class="p">:</span> <span class="p">[]}])</span>
@@ -768,14 +769,15 @@ previously configured the necessary Auth instances using lapidary_authenticate.<
 
 <span class="c1"># User code</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="n">client</span> <span class="o">=</span> <span class="n">MyClient</span><span class="p">()</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">hac</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">MyClient</span><span class="p">(</span><span class="n">hac</span><span class="p">)</span>
 
-    <span class="n">token</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">()</span><span class="o">.</span><span class="n">token</span>
-    <span class="n">client</span><span class="o">.</span><span class="n">lapidary_authenticate</span><span class="p">(</span><span class="n">apiKeyAuth</span><span class="o">=</span><span class="n">HeaderApiKey</span><span class="p">(</span><span class="n">token</span><span class="p">))</span>
-    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">my_op</span><span class="p">()</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">())</span><span class="o">.</span><span class="n">token</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">lapidary_authenticate</span><span class="p">(</span><span class="n">apiKeyAuth</span><span class="o">=</span><span class="n">HeaderApiKey</span><span class="p">(</span><span class="n">token</span><span class="p">))</span>
+        <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">my_op</span><span class="p">()</span>
 
-    <span class="c1"># optionally</span>
-    <span class="n">client</span><span class="o">.</span><span class="n">lapidary_deauthenticate</span><span class="p">(</span><span class="s1">&#39;apiKeyAuth&#39;</span><span class="p">)</span>
+        <span class="c1"># optionally</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">lapidary_deauthenticate</span><span class="p">(</span><span class="s1">&#39;apiKeyAuth&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p><code>lapidary_authenticate</code> also accepts tuples of Auth instances with names, so this is possible:</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">admin_auth</span><span class="p">(</span><span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NamedAuth</span><span class="p">:</span>
