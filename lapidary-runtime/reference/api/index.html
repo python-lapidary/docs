@@ -627,17 +627,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lapidary.runtime.ClientBase" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ClientBase
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#lapidary.runtime.HttpxMiddleware" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -878,17 +867,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lapidary.runtime.ClientBase" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ClientBase
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#lapidary.runtime.HttpxMiddleware" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1054,7 +1032,7 @@
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="lapidary.runtime.client_base">client_base</span></code></td>
+            <td><code><span title="lapidary.runtime.client">client</span></code></td>
             <td class="doc-module-details">
               <div class="doc-md-description">
                 
@@ -1162,14 +1140,6 @@
             <td class="doc-class-details">
               <div class="doc-md-description">
                 <p>Mapping between response code, headers, media type and body type.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td><code><a class="autorefs autorefs-internal" href="#lapidary.runtime.ClientBase">ClientBase</a></code></td>
-            <td class="doc-class-details">
-              <div class="doc-md-description">
-                <p>Base for Client classes</p>
               </div>
             </td>
           </tr>
@@ -2065,152 +2035,6 @@ Key may be:</p>
 
 
 
-<h2 id="lapidary.runtime.ClientBase" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">ClientBase</span>
-
-
-<a href="#lapidary.runtime.ClientBase" class="headerlink" title="Permanent link">¤</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">ClientBase</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n"><span title="httpx.AsyncClient">AsyncClient</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">middlewares</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="&lt;code&gt;collections.abc.Sequence&lt;/code&gt;" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" href="#lapidary.runtime.HttpxMiddleware">HttpxMiddleware</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span> <span class="n">auth</span><span class="p">:</span> <span class="n"><span title="httpx.Auth">Auth</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
-</code></pre></div>
-
-    <div class="doc doc-contents ">
-            <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-external" title="&lt;code&gt;abc.ABC&lt;/code&gt;" href="https://docs.python.org/3/library/abc.html#abc.ABC">ABC</a></code></p>
-
-
-
-        <p>Base for Client classes</p>
-
-        
-
-
-<table>
-      <thead>
-        <tr>
-          <th><span class="doc-section-title">PARAMETER</span></th>
-          <th><span>DESCRIPTION</span></th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>client</code>
-            </td>
-            <td class="doc-param-details">
-              <div class="doc-md-description">
-                <p>the httpx client to use</p>
-              </div>
-              <p>
-                  <span class="doc-param-annotation">
-                    <b>TYPE:</b>
-                      <code><span title="httpx.AsyncClient">AsyncClient</span> | None</code>
-                  </span>
-                  <span class="doc-param-default">
-                    <b>DEFAULT:</b>
-                      <code>None</code>
-                  </span>
-              </p>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>middlewares</code>
-            </td>
-            <td class="doc-param-details">
-              <div class="doc-md-description">
-                <p>list of middlewares to process HTTP requests and responses</p>
-              </div>
-              <p>
-                  <span class="doc-param-annotation">
-                    <b>TYPE:</b>
-                      <code><a class="autorefs autorefs-external" title="&lt;code&gt;collections.abc.Sequence&lt;/code&gt;" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-internal" href="#lapidary.runtime.HttpxMiddleware">HttpxMiddleware</a>]</code>
-                  </span>
-                  <span class="doc-param-default">
-                    <b>DEFAULT:</b>
-                      <code>()</code>
-                  </span>
-              </p>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-          
-
-
-
-
-
-
-
-
-
-
-
-
-                  <details class="mkdocstrings-source">
-                    <summary>Source code in <code>src/lapidary/runtime/client_base.py</code></summary>
-                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span>
-<span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">middlewares</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">HttpxMiddleware</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">auth</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Auth</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param client: the httpx client to use</span>
-<span class="sd">    :param middlewares: list of middlewares to process HTTP requests and responses</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_base_url</span> <span class="o">=</span> <span class="n">base_url</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span> <span class="ow">or</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span> <span class="o">=</span> <span class="n">auth</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_middlewares</span> <span class="o">=</span> <span class="n">middlewares</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_send</span> <span class="o">=</span> <span class="n">_mk_send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">send</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_middlewares</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-                  </details>
-
-
-
-<div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
 <h2 id="lapidary.runtime.HttpxMiddleware" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">HttpxMiddleware</span>
 
@@ -2227,25 +2051,6 @@ Key may be:</p>
         <p>HTTP middleware protocol, used to fix request or response objects.</p>
 
           
-
-
-  <div class="doc doc-backlinks">
-        <b class="doc doc-backlink-type">Used by:</b>
-          <ul class="doc doc-backlink-list">
-      <li class="doc doc-backlink">
-            <span class="doc doc-backlink-crumb">
-      <a href="#lapidary.runtime"><code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;runtime</a>
-  </span>
-
-            <span class="doc doc-backlink-crumb last">
-      <a href="#lapidary.runtime.ClientBase"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ClientBase</a>
-  </span>
-
-      </li>
-  </ul>
-
-  </div>
-
 
 
 

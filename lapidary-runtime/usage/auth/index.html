@@ -717,25 +717,19 @@
 
 <h1 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">¤</a></h1>
 <h2 id="behaviour">Behaviour<a class="headerlink" href="#behaviour" title="Permanent link">¤</a></h2>
-<p>Lapidary uses a simple pattern for creating client instances with the required auth handlers.
-Users can simply create their client instances with a <code>httpx.Auth</code> instance,
-or make use of a simple shallow copy tool to clone an existing instance with an authenticator configured.</p>
+<p>Lapidary uses a simple pattern for authentication. Pass an <code>httpx.Auth</code> instance when creating a client via <code>for_api()</code>,
+or create a new client object with a different authenticator using <code>APIClient.with_auth()</code>.</p>
 <p>Lapidary doesn't validate whether a client has an authenticator required for a given operation,
 since it can't know whether a server implies one scope from another.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lapidary.runtime.client</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">lapidary.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">lapidary.runtime.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">HeaderApiKey</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">Annotated</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">MyClient</span><span class="p">(</span><span class="n">ClientBase</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span>
-            <span class="n">base_url</span><span class="o">=</span><span class="s1">&#39;https://example.com/&#39;</span>
-        <span class="p">)</span>
-
+<span class="k">class</span><span class="w"> </span><span class="nc">MyClient</span><span class="p">:</span>
     <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/api/operation&#39;</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">my_op</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
         <span class="k">pass</span>
@@ -748,15 +742,16 @@ since it can't know whether a server implies one scope from another.</p>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
         <span class="k">pass</span>
 
+
 <span class="c1"># User code</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">http_client</span><span class="p">:</span>
-        <span class="n">client</span> <span class="o">=</span> <span class="n">MyClient</span><span class="p">(</span><span class="n">http_client</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">http</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">lapidary</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">for_api</span><span class="p">(</span><span class="n">MyClient</span><span class="p">,</span> <span class="n">http</span><span class="p">,</span> <span class="s1">&#39;https://example.com/&#39;</span><span class="p">)</span>
 
-        <span class="n">token</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;secret&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">token</span>
-        <span class="n">client_w_auth</span> <span class="o">=</span> <span class="n">with_auth</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">HeaderApiKey</span><span class="p">(</span><span class="n">token</span><span class="p">))</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;secret&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">token</span>
+        <span class="n">client_w_auth</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">with_auth</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">HeaderApiKey</span><span class="p">(</span><span class="n">token</span><span class="p">))</span>
 
-        <span class="k">await</span> <span class="n">client_w_auth</span><span class="o">.</span><span class="n">my_op</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">client_w_auth</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">my_op</span><span class="p">()</span>
 </code></pre></div>
 
 

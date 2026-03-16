@@ -925,18 +925,17 @@
 
 <p>Methods decorated with one of @get, @post, @put, etc. are transformed into operation methods. Invoking these methods
 initiates an HTTP request-response cycle. Lapidary is designed to be compatible with the HTTP methods defined in OpenAPI
-3.x, which include all methods defined in RFC 9110, with the exception of CONNECT. Methods in your client that aren't
-decorated with these operation decorators are simply ignored.</p>
+3.x, which include all methods defined in RFC 9110 except for CONNECT. Methods in your client that aren't
+decorated with these decorators are simply ignored.</p>
 <div class="admonition note methods">
 <p class="admonition-title">Note</p>
 <p>Python methods and HTTP methods represent two distinct concepts.</p>
 <p>Throughout this documentation, the term <code>method</code> in a programming context always refers to a Python method (defined with <code>def</code>), whereas <code>HTTP methods</code> (GET, POST, etc.) are specified as such.</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">lapidary.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientBase</span><span class="p">,</span> <span class="n">get</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">lapidary.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">CatClient</span><span class="p">(</span><span class="n">ClientBase</span><span class="p">):</span>
-
+<span class="k">class</span><span class="w"> </span><span class="nc">CatClient</span><span class="p">:</span>
     <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cats&#39;</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
         <span class="k">pass</span>
@@ -952,21 +951,21 @@ decorated with these operation decorators are simply ignored.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">¤</a></h2>
 <p>Parameters within Lapidary are designed to represent different components of an HTTP request, including headers,
 cookies, query parameters, path parameters, and the body of the request.</p>
-<p>It's essential that every parameter, including self, is annotated to define its role and type explicitly. Note that *
-args and **kwargs are not supported in this structure to maintain clarity and specificity in request definition.</p>
+<p>It's essential that every parameter, including self, is annotated to define its role and type explicitly. Note that
+*args and **kwargs are not supported in this structure to maintain clarity and specificity in request definition.</p>
 <h3 id="query-parameters">Query parameters<a class="headerlink" href="#query-parameters" title="Permanent link">¤</a></h3>
 <p>Query parameters are elements added to the URL following the '?' character, serving to modify or refine the request. An
 example format is <a href="https://example.com/path?param=value">https://example.com/path?param=value</a>.</p>
 <p>To declare a query parameter in Lapidary, use the Query() annotation:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cats&#39;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
-        <span class="n">color</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Query</span><span class="p">],</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Query</span><span class="p">],</span>
 <span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
 <p>Calling a method like this:</p>
-<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">list_cats</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p>results in a GET request being sent to the following URL: <a href="https://example.com/cats?color=black">https://example.com/cats?color=black</a>.</p>
 <p>This illustrates how arguments passed to the method are directly mapped to query parameters in the URL, forming a
@@ -978,13 +977,13 @@ parameters are essential for accessing specific resources or performing operatio
 parameter with Path(). Here is an example of how to define and use a path parameter:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cat/</span><span class="si">{cat_id}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_cat</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
-        <span class="n">cat_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="n">cat_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
 <span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
 <p>When you call this method like so:</p>
-<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get_cat</span><span class="p">(</span><span class="n">cat_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">get_cat</span><span class="p">(</span><span class="n">cat_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 <p>it constructs and sends a GET request to <a href="https://example.com/cat/1">https://example.com/cat/1</a>. This demonstrates the method's ability to
 dynamically incorporate the provided argument (cat_id=1) into the request URL as a path parameter.</p>
@@ -995,13 +994,13 @@ method declaration, specifying the header name and the expected value type.</p>
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cats&#39;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
-        <span class="n">version</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Header</span><span class="p">],</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Header</span><span class="p">],</span>
 <span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
 <p>Invoking this method with:</p>
-<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">list_cats</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p>results in the execution of a GET request that includes the header <code>version: 2</code>.</p>
 <p>Note: The Cookie, Header, Param, and Query annotations all accept parameters such as name, style, and explode as defined
@@ -1012,25 +1011,26 @@ HTTP request.</p>
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cats&#39;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
-        <span class="n">cookie_key</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Cookie</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)],</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="n">cookie_key</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Cookie</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)],</span>
 <span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
 <p>Calling this method as</p>
-<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">list_cats</span><span class="p">(</span><span class="n">cookie_key</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">(</span><span class="n">cookie_key</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p>will send a GET request that includes the header Cookie: key=value.</p>
 <h2 id="request-body">Request body<a class="headerlink" href="#request-body" title="Permanent link">¤</a></h2>
 <p>To mark a parameter for serialization into the HTTP body, annotate it with RequestBody. Each method can include only one
 such parameter.</p>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@POST</span><span class="p">(</span><span class="s1">&#39;/cat&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/cat&#39;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_cat</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
-        <span class="n">cat</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Cat</span><span class="p">,</span> <span class="n">Body</span><span class="p">({</span>
-            <span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">Cat</span><span class="p">,</span>
-        <span class="p">})],</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="n">cat</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Cat</span><span class="p">,</span>
+        <span class="n">Body</span><span class="p">({</span><span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">Cat</span><span class="p">}),</span>
+    <span class="p">],</span>
 <span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></div>
@@ -1045,11 +1045,11 @@ types. This mechanism allows developers to define how responses are parsed and r
 <ol>
 <li>
 <p>At the method signature level - The declared return type here should reflect the expected successful response
-   structure. It can be a single type or a Union of types, accommodating various potential non-error response bodies.</p>
+    structure. It can be a single type or a Union of types, accommodating various potential non-error response bodies.</p>
 </li>
 <li>
 <p>Within the <code>Responses</code> annotation - This details the specific type or types to be used for parsing the response body,
-   depending on the response's HTTP status code and content type matching those specified.</p>
+    depending on the response's HTTP status code and content type matching those specified.</p>
 </li>
 </ol>
 <div class="admonition note">
@@ -1058,13 +1058,15 @@ types. This mechanism allows developers to define how responses are parsed and r
 </div>
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cat&#39;</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Annotated</span><span class="p">[</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Annotated</span><span class="p">[</span>
     <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
-    <span class="n">Responses</span><span class="p">({</span>
-        <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="n">Body</span><span class="p">({</span>
-            <span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span>
-        <span class="p">})),</span>
-    <span class="p">})</span>
+    <span class="n">Responses</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="n">Body</span><span class="p">({</span><span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Cat</span><span class="p">]})),</span>
+        <span class="p">}</span>
+    <span class="p">),</span>
 <span class="p">]:</span>
     <span class="k">pass</span>
 </code></pre></div>
@@ -1076,30 +1078,34 @@ safety for API interactions.</p>
 <p>Lapidary operation methods always return a tuple. The first element is the response body, the second is the response metadata (headers and/or status code), each of them being optional.</p>
 <p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CatListMeta</span><span class="p">(</span><span class="n">ModelBase</span><span class="p">):</span>
-   <span class="n">total_count</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Header</span><span class="p">(</span><span class="s1">&#39;Total-Count&#39;</span><span class="p">)]</span>
-   <span class="n">status_code</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]</span>
+    <span class="n">total_count</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Header</span><span class="p">(</span><span class="s1">&#39;Total-Count&#39;</span><span class="p">)]</span>
+    <span class="n">status_code</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">CatClient</span><span class="p">(</span><span class="n">ClientBase</span><span class="p">):</span>
-   <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cat&#39;</span><span class="p">)</span>
-   <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Annotated</span><span class="p">[</span>
-       <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span> <span class="n">CatListMeta</span><span class="p">],</span>
-       <span class="n">Responses</span><span class="p">({</span>
-           <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span>
-                <span class="n">Body</span><span class="p">({</span>
-                    <span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span>
-                <span class="p">}),</span>
-                <span class="n">CatListMeta</span>
-           <span class="p">),</span>
-       <span class="p">})</span>
-   <span class="p">]:</span>
-       <span class="k">pass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CatClient</span><span class="p">:</span>
+    <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cat&#39;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span> <span class="n">CatListMeta</span><span class="p">],</span>
+        <span class="n">Responses</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span>
+                    <span class="n">Body</span><span class="p">({</span><span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">]}),</span>
+                    <span class="n">CatListMeta</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+    <span class="p">]:</span>
+        <span class="k">pass</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">CatClient</span><span class="p">()</span>
-<span class="n">cats_body</span><span class="p">,</span> <span class="n">cats_meta</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">list_cats</span><span class="p">()</span>
-<span class="k">assert</span> <span class="n">cats_body</span><span class="o">.</span><span class="n">body</span> <span class="o">==</span> <span class="p">[</span><span class="n">Cat</span><span class="p">(</span><span class="o">...</span><span class="p">)]</span>
-<span class="k">assert</span> <span class="n">cats_meta</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">1</span>
-<span class="k">assert</span> <span class="n">cats_meta</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+
+<span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">http</span><span class="p">:</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">lapidary</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">for_api</span><span class="p">(</span><span class="n">CatClient</span><span class="p">,</span> <span class="n">http</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
+    <span class="n">cats_body</span><span class="p">,</span> <span class="n">cats_meta</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">cats_body</span><span class="o">.</span><span class="n">body</span> <span class="o">==</span> <span class="p">[</span><span class="n">Cat</span><span class="p">(</span><span class="o">...</span><span class="p">)]</span>
+    <span class="k">assert</span> <span class="n">cats_meta</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">cats_meta</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
 </code></pre></div>
 <h3 id="handling-error-responses">Handling error responses<a class="headerlink" href="#handling-error-responses" title="Permanent link">¤</a></h3>
 <p>Lapidary maps HTTP error responses to exceptions.</p>
@@ -1110,21 +1116,21 @@ safety for API interactions.</p>
 
 <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cat&#39;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Annotated</span><span class="p">[</span>
     <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
-    <span class="n">Responses</span><span class="p">({</span>
-        <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
-        <span class="s1">&#39;4XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="n">Body</span><span class="p">({</span>
-            <span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">ErrorModel</span><span class="p">,</span>
-        <span class="p">}))</span>
-    <span class="p">}),</span>
+    <span class="n">Responses</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+            <span class="s1">&#39;4XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="n">Body</span><span class="p">({</span><span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">ErrorModel</span><span class="p">})),</span>
+        <span class="p">}</span>
+    <span class="p">),</span>
 <span class="p">]:</span>
     <span class="k">pass</span>
 </code></pre></div>
 <p>Responses with status code 400 and up will cause <code>HttpErrorResponse</code> to be risen as long as they're declared in the response map.</p>
 <div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
-    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">list_cats</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">()</span>
 <span class="k">except</span> <span class="n">HttpErrorResponse</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span>
     <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">headers</span> <span class="ow">is</span> <span class="kc">None</span>
@@ -1132,7 +1138,7 @@ safety for API interactions.</p>
 </code></pre></div>
 <p>Any responses not declared in the response map, regardless of their status code, raise <code>UnexpectedResponse</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
-    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">list_cats</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">()</span>
 <span class="k">except</span> <span class="n">UnexpectedResponse</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="p">,</span> <span class="n">httpx</span><span class="o">.</span><span class="n">response</span><span class="p">)</span>
 </code></pre></div>
