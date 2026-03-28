@@ -530,6 +530,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -729,6 +757,15 @@ since it can't know whether a server implies one scope from another.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">Annotated</span>
 
 
+<span class="k">class</span><span class="w"> </span><span class="nc">LoginRequest</span><span class="p">(</span><span class="n">ModelBase</span><span class="p">):</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LoginResponse</span><span class="p">(</span><span class="n">ModelBase</span><span class="p">):</span>
+    <span class="n">token</span><span class="p">:</span> <span class="nb">str</span>
+
+
 <span class="k">class</span><span class="w"> </span><span class="nc">MyClient</span><span class="p">:</span>
     <span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/api/operation&#39;</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">my_op</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
@@ -737,9 +774,12 @@ since it can't know whether a server implies one scope from another.</p>
     <span class="nd">@post</span><span class="p">(</span><span class="s1">&#39;/api/login&#39;</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
-        <span class="n">user</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
-        <span class="n">password</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="o">...</span><span class="p">:</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">body</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">LoginRequest</span><span class="p">,</span> <span class="n">Body</span><span class="p">({</span><span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">LoginRequest</span><span class="p">})],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">tuple</span><span class="p">[</span><span class="n">LoginResponse</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+        <span class="n">Responses</span><span class="p">({</span><span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="n">Body</span><span class="p">({</span><span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">LoginResponse</span><span class="p">}))}),</span>
+    <span class="p">]:</span>
         <span class="k">pass</span>
 
 
@@ -748,8 +788,8 @@ since it can't know whether a server implies one scope from another.</p>
     <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">http</span><span class="p">:</span>
         <span class="n">client</span> <span class="o">=</span> <span class="n">lapidary</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">for_api</span><span class="p">(</span><span class="n">MyClient</span><span class="p">,</span> <span class="n">http</span><span class="p">,</span> <span class="s1">&#39;https://example.com/&#39;</span><span class="p">)</span>
 
-        <span class="n">token</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;secret&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">token</span>
-        <span class="n">client_w_auth</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">with_auth</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">HeaderApiKey</span><span class="p">(</span><span class="n">token</span><span class="p">))</span>
+        <span class="n">response</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="n">LoginRequest</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;secret&#39;</span><span class="p">))</span>
+        <span class="n">client_w_auth</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">with_auth</span><span class="p">(</span><span class="n">HeaderApiKey</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">token</span><span class="p">))</span>
 
         <span class="k">await</span> <span class="n">client_w_auth</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">my_op</span><span class="p">()</span>
 </code></pre></div>

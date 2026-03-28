@@ -519,6 +519,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -696,15 +724,11 @@
 <h1 id="client-class">Client class<a class="headerlink" href="#client-class" title="Permanent link">¤</a></h1>
 <p>The core of the Lapidary API client is a single class that declares all the methods. Pass it to <code>for_api()</code>
 along with an <code>httpx.AsyncClient</code> instance and a base URL to get an <code>APIClient</code>. Operations are then accessed via <code>.ops</code>.</p>
-<p>Example usage:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CatClient</span><span class="p">:</span>
-    <span class="c1"># operation mothods</span>
-    <span class="o">...</span>
-
-<span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">http</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">http</span><span class="p">:</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">lapidary</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">for_api</span><span class="p">(</span><span class="n">CatClient</span><span class="p">,</span> <span class="n">http</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
-    <span class="c1"># call client methods via client.ops</span>
+    <span class="n">result</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">some_operation</span><span class="p">()</span>
 </code></pre></div>
+<p><code>for_api()</code> also accepts <code>auth</code> (see <a href="../auth/">Authentication</a>) and <code>middlewares</code> (see <a href="../middleware/">Middleware</a>).</p>
 <h2 id="additional-http-headers">Additional HTTP headers<a class="headerlink" href="#additional-http-headers" title="Permanent link">¤</a></h2>
 <p>HTTP request headers can be added using the standard httpx API. It's recommended to add User-Agent header.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>

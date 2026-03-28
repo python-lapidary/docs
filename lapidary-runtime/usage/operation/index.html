@@ -518,6 +518,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#optional-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#request-body" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -619,6 +630,34 @@
     
   
     Middleware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paging
   
 
     
@@ -792,6 +831,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional parameters
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1003,8 +1053,15 @@ method declaration, specifying the header name and the expected value type.</p>
 <div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p>results in the execution of a GET request that includes the header <code>version: 2</code>.</p>
-<p>Note: The Cookie, Header, Param, and Query annotations all accept parameters such as name, style, and explode as defined
-by OpenAPI.</p>
+<p>HTTP headers conventionally use kebab-case names, which are not valid Python identifiers. Pass the actual header name as the first argument to <code>Header</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cats&#39;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="n">x_request_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Header</span><span class="p">(</span><span class="s1">&#39;X-Request-Id&#39;</span><span class="p">)],</span>
+<span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<p>The same applies to <code>Query</code> and <code>Cookie</code> — pass the wire name as the first argument when it differs from the Python parameter name.</p>
 <h3 id="cookie-headers">Cookie headers<a class="headerlink" href="#cookie-headers" title="Permanent link">¤</a></h3>
 <p>To add a cookie to the request, you use the Cookie parameter. This adds a name=value pair to the Cookie header of the
 HTTP request.</p>
@@ -1020,6 +1077,18 @@ HTTP request.</p>
 <div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">(</span><span class="n">cookie_key</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p>will send a GET request that includes the header Cookie: key=value.</p>
+<h2 id="optional-parameters">Optional parameters<a class="headerlink" href="#optional-parameters" title="Permanent link">¤</a></h2>
+<p>Query, header, and cookie parameters can all be made optional by using <code>T | None</code> and a default of <code>None</code>. Parameters set to <code>None</code> are omitted from the request entirely.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@get</span><span class="p">(</span><span class="s1">&#39;/cats&#39;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">Query</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">x_request_id</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">Header</span><span class="p">(</span><span class="s1">&#39;X-Request-Id&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">Cookie</span><span class="p">(</span><span class="s1">&#39;session_id&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div>
 <h2 id="request-body">Request body<a class="headerlink" href="#request-body" title="Permanent link">¤</a></h2>
 <p>To mark a parameter for serialization into the HTTP body, annotate it with RequestBody. Each method can include only one
 such parameter.</p>
@@ -1061,10 +1130,10 @@ types. This mechanism allows developers to define how responses are parsed and r
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Annotated</span><span class="p">[</span>
-    <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
     <span class="n">Responses</span><span class="p">(</span>
         <span class="p">{</span>
-            <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="n">Body</span><span class="p">({</span><span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Cat</span><span class="p">]})),</span>
+            <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="n">Body</span><span class="p">({</span><span class="s1">&#39;application/json&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">]})),</span>
         <span class="p">}</span>
     <span class="p">),</span>
 <span class="p">]:</span>
@@ -1103,7 +1172,7 @@ safety for API interactions.</p>
 <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">http</span><span class="p">:</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">lapidary</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">for_api</span><span class="p">(</span><span class="n">CatClient</span><span class="p">,</span> <span class="n">http</span><span class="p">,</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">)</span>
     <span class="n">cats_body</span><span class="p">,</span> <span class="n">cats_meta</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="n">cats_body</span><span class="o">.</span><span class="n">body</span> <span class="o">==</span> <span class="p">[</span><span class="n">Cat</span><span class="p">(</span><span class="o">...</span><span class="p">)]</span>
+    <span class="k">assert</span> <span class="n">cats_body</span> <span class="o">==</span> <span class="p">[</span><span class="n">Cat</span><span class="p">(</span><span class="o">...</span><span class="p">)]</span>
     <span class="k">assert</span> <span class="n">cats_meta</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">1</span>
     <span class="k">assert</span> <span class="n">cats_meta</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
 </code></pre></div>
@@ -1118,7 +1187,7 @@ safety for API interactions.</p>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_cats</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Annotated</span><span class="p">[</span>
-    <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Cat</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
     <span class="n">Responses</span><span class="p">(</span>
         <span class="p">{</span>
             <span class="s1">&#39;2XX&#39;</span><span class="p">:</span> <span class="n">Response</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
@@ -1136,7 +1205,8 @@ safety for API interactions.</p>
     <span class="k">assert</span> <span class="n">e</span><span class="o">.</span><span class="n">headers</span> <span class="ow">is</span> <span class="kc">None</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">ErrorModel</span><span class="p">)</span>
 </code></pre></div>
-<p>Any responses not declared in the response map, regardless of their status code, raise <code>UnexpectedResponse</code>.</p>
+<p>Any responses not declared in the response map, regardless of their status code, raise <code>UnexpectedResponse</code>.
+<code>UnexpectedResponse</code> is also raised if the response body cannot be decoded into the declared model type.</p>
 <div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
     <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">list_cats</span><span class="p">()</span>
 <span class="k">except</span> <span class="n">UnexpectedResponse</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
