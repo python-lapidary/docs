@@ -2834,7 +2834,7 @@ Python doesn't fully support parametrized exception types, but extending types c
 
 
 <a href="#lapidary.for_api" class="headerlink" title="Permanent link">¤</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">for_api</span><span class="p">(</span><span class="n">api</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#type">type</a></span><span class="p">[</span><span class="n"><span title="lapidary.client.API_T">API_T</span></span><span class="p">],</span> <span class="n">client</span><span class="p">:</span> <span class="n"><span title="httpx.AsyncClient">AsyncClient</span></span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">middlewares</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="&lt;code&gt;collections.abc.Sequence&lt;/code&gt;" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" href="#lapidary.HttpxMiddleware">HttpxMiddleware</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span> <span class="n">auth</span><span class="p">:</span> <span class="n"><span title="httpx.Auth">Auth</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="lapidary.client.APIClient">APIClient</span></span><span class="p">[</span><span class="n"><span title="lapidary.client.API_T">API_T</span></span><span class="p">]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">for_api</span><span class="p">(</span><span class="n">api</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#type">type</a></span><span class="p">[</span><span class="n"><span title="lapidary.client.API_T">API_T</span></span><span class="p">],</span> <span class="n">client</span><span class="p">:</span> <span class="n"><span title="httpx.AsyncClient">AsyncClient</span></span><span class="p">,</span> <span class="n">base_url</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">middlewares</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="&lt;code&gt;collections.abc.Sequence&lt;/code&gt;" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" href="#lapidary.HttpxMiddleware">HttpxMiddleware</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span> <span class="n">auth</span><span class="p">:</span> <span class="n"><span title="httpx.Auth">Auth</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="lapidary.client.APIClient">APIClient</span></span><span class="p">[</span><span class="n"><span title="lapidary.client.API_T">API_T</span></span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -2888,12 +2888,16 @@ Python doesn't fully support parametrized exception types, but extending types c
             </td>
             <td class="doc-param-details">
               <div class="doc-md-description">
-                <p>Base URL prepended to all operation paths.</p>
+                <p>Base URL prepended to all operation paths. Defaults to <code>lapidary_base_url</code> class field.</p>
               </div>
               <p>
                   <span class="doc-param-annotation">
                     <b>TYPE:</b>
-                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+                      <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | None</code>
+                  </span>
+                  <span class="doc-param-default">
+                    <b>DEFAULT:</b>
+                      <code>None</code>
                   </span>
               </p>
             </td>
@@ -2963,10 +2967,13 @@ Python doesn't fully support parametrized exception types, but extending types c
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">for_api</span><span class="p">(</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">for_api</span><span class="p">(</span>
     <span class="n">api</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">API_T</span><span class="p">],</span>
     <span class="n">client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">,</span>
-    <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">middlewares</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">HttpxMiddleware</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">auth</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Auth</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2976,12 +2983,15 @@ Python doesn't fully support parametrized exception types, but extending types c
 
 <span class="sd">    :param api: The API descriptor class — a plain class whose methods are decorated with :func:`get`, :func:`post`, etc.</span>
 <span class="sd">    :param client: The underlying :class:`httpx.AsyncClient` used to send requests.</span>
-<span class="sd">    :param base_url: Base URL prepended to all operation paths.</span>
+<span class="sd">    :param base_url: Base URL prepended to all operation paths. Defaults to ``lapidary_base_url`` class field.</span>
 <span class="sd">    :param middlewares: Optional sequence of :class:`HttpxMiddleware` instances applied to every request.</span>
 <span class="sd">    :param auth: Optional :class:`httpx.Auth` instance used to authenticate requests.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resolved</span> <span class="o">=</span> <span class="n">base_url</span> <span class="k">if</span> <span class="n">base_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="s1">&#39;lapidary_base_url&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resolved</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No base_url provided and the client class has no lapidary_base_url field&#39;</span><span class="p">)</span>
     <span class="n">api_model</span> <span class="o">=</span> <span class="n">APIModel</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">APIClient</span><span class="p">(</span><span class="n">api_model</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">,</span> <span class="n">middlewares</span><span class="o">=</span><span class="n">middlewares</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">APIClient</span><span class="p">(</span><span class="n">api_model</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">resolved</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">,</span> <span class="n">middlewares</span><span class="o">=</span><span class="n">middlewares</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
