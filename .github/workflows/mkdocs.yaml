@@ -12,17 +12,17 @@ jobs:
 
     steps:
     - name: Checkout docs
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Checkout lapidary
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: python-lapidary/lapidary
         ref: develop
         path: docs/lapidary
 
     - name: Checkout lapidary-render
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: python-lapidary/lapidary-render
         ref: develop
